@@ -8,6 +8,7 @@ Handcrafted Haven aims to revolutionize the way handcrafted items are discovered
 
 ## Group Members
 
+<<<<<<< HEAD
 Jose Morales
 
 Luis Galvez
@@ -16,3 +17,8 @@ Peter Babcock
 
 
 
+=======
+* Israel Carmona
+* Luis F. Galvez
+* Peter Babcock
+>>>>>>> 9cbc06a78aa7a4e00306fa92c7527eb5a390e641
