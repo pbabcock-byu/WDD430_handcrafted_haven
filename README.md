@@ -9,7 +9,9 @@ Handcrafted Haven aims to revolutionize the way handcrafted items are discovered
 ## Group Members
 
 Jose Morales
+
 Luis Galvez
+
 Peter Babcock
 
 
