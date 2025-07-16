@@ -7,18 +7,7 @@ Handcrafted Haven is an innovative web application that aims to provide a platfo
 Handcrafted Haven aims to revolutionize the way handcrafted items are discovered, appreciated, and acquired. By providing a digital platform for artisans to showcase their creativity and connect with a broader audience, the web application fosters a thriving community of passionate creators and conscious consumers. With its user-friendly features, secure e-commerce capabilities, and emphasis on customization and community engagement, Handcrafted Haven is set to become the go-to destination for those seeking unique, handcrafted treasures.
 
 ## Group Members
-
-<<<<<<< HEAD
-Jose Morales
-
-Luis Galvez
-
-Peter Babcock
-
-
-
 =======
 * Israel Carmona
 * Luis F. Galvez
 * Peter Babcock
->>>>>>> 9cbc06a78aa7a4e00306fa92c7527eb5a390e641
