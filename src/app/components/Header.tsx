@@ -1,42 +1,59 @@
 import Link from 'next/link';
 import Image from 'next/image';
+//import logo from '@/public/HH-logo.png';
+import { NavigationType } from "./types";
+
+import React from "react";
+
+
+const navigation: NavigationType[] = [
+    { name: "Home", href: "#", id: 1 },
+    { name: "About", href: "/about", id: 2 },
+    { name: "Products", href: "/products", id: 3 },
+    { name: "Reviews", href: "/reviews", id: 4 },
+    { name: "Artisans", href: "/artisans", id: 5 },
+    { name: "Sellers", href: "/sellers", id: 6 },
+];
+
 
 const Header = () => {
   return (
-    <header className="bg-gray-100 p-4 flex justify-between items-center shadow-md">
-      <Link href="/">
-        <Image
-          src="/HH-logo.png"
-          alt="Logo"
-          width={100}
-          height={100}
-          className="cursor-pointer"
-        />
-      </Link>
-      <h1>Handcrafted Haven</h1>
-      <nav>
-        <ul className="flex space-x-26 px-6 py-12 rounded">
-            {[
-            { href: "/", label: "Home" },
-            { href: "/sellers", label: "Sellers" },
-            { href: "/logim", label: "Login" },
-            { href: "/ratings", label: "Ratings" },
-            { href: "/products", label: "Products" },
-            ].map(({ href, label }) => (
-            <li key={href}>
-                <Link
-                href={href}
-                className="block px-4 py-2 rounded-lg bg-white shadow hover:red text-black text-lg font-medium transition-colors duration-100"
-                >
-                {label}
-                </Link>
-            </li>
-            ))}
-        </ul>
-
+    <header>
+      <nav
+        className="flex items-center justify-between p-6 lg:p-8"
+        aria-label="Global"
+      >
+        {/* logo */}
+        <div className="flex lg:flex-1">
+          <Link href="/">
+            <Image width={120} height={120} src='/HH-logo.png' alt="logo" />
+          </Link>
+        </div>
+        {/* links */}
+        <div className="flex gap-x-12 align-center">
+          {navigation.map((item: NavigationType) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className="text-sm font-semibold leading-6 hover:text-blue-500"
+            >
+              {item.name}
+            </a>
+          ))}
+        </div>
+        {/* login */}
+        <div className="flex lg:flex-1 lg:justify-end lg:gap-4 pr-8">
+            <Link href="/login" className="text-sm font-semibold leading-6">
+                Log in <span aria-hidden="true">&larr;</span>
+            </Link>
+            <Link href="/Logout" className="text-sm font-semibold leading-6">
+                Log Out <span aria-hidden="true">&rarr;</span>
+            </Link>
+        </div>
       </nav>
     </header>
   );
 };
 
 export default Header;
+
