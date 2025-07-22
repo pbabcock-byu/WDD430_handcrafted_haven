@@ -1,4 +1,7 @@
-import Image from "next/image";
+
+//you can use the next/image component to automatically optimize your images
+import Image from 'next/image';
+
 import styles from "./page.module.css";
 import Link from "next/link";
 
@@ -24,7 +27,7 @@ export default function Home() {
                   href="/"
                   style={{
                     textDecoration: "none",
-                    color: "white",
+                    color: "black",
                     fontSize: "1.2rem",
                   }}
                 >
@@ -36,7 +39,7 @@ export default function Home() {
                   href="/sellers"
                   style={{
                     textDecoration: "none",
-                    color: "white",
+                    color: "black",
                     fontSize: "1.2rem",
                   }}
                 >
@@ -48,7 +51,7 @@ export default function Home() {
                   href="/profile"
                   style={{
                     textDecoration: "none",
-                    color: "white",
+                    color: "black",
                     fontSize: "1.2rem",
                   }}
                 >
