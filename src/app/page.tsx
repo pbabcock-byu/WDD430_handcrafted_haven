@@ -14,7 +14,7 @@ const HomePage = () => {
       <br />
       <div>
         <main className="p-4">
-          <h2>TEsting header 2</h2>
+          <h2>Testing header 2</h2>
           <br />
           <br />
           <p>
@@ -24,6 +24,9 @@ const HomePage = () => {
             behind handmade items. Forget mass production; here, every piece has a
             soul.
           </p>
+          <Link href="/login" className="text-sm font-semibold leading-6">
+                Join us as a Seller! <span aria-hidden="true">&larr;</span>
+          </Link>
         </main>
       </div>
     </div>

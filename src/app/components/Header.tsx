@@ -46,8 +46,8 @@ const Header = () => {
             <Link href="/login" className="text-sm font-semibold leading-6">
                 Log in <span aria-hidden="true">&larr;</span>
             </Link>
-            <Link href="/Logout" className="text-sm font-semibold leading-6">
-                Log Out <span aria-hidden="true">&rarr;</span>
+            <Link href="/sign-up" className="text-sm font-semibold leading-6">
+                Sign Up <span aria-hidden="true">&rarr;</span>
             </Link>
         </div>
       </nav>
