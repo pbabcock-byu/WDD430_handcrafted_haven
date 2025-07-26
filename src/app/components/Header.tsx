@@ -7,7 +7,7 @@ import React from "react";
 
 
 const navigation: NavigationType[] = [
-    { name: "Home", href: "#", id: 1 },
+    { name: "Home", href: "./", id: 1 },
     { name: "About", href: "/about", id: 2 },
     { name: "Products", href: "/products", id: 3 },
     { name: "Reviews", href: "/reviews", id: 4 },
@@ -26,16 +26,16 @@ const Header = () => {
         {/* logo */}
         <div className="flex lg:flex-1">
           <Link href="/">
-            <Image width={120} height={120} src='/HH-logo.png' alt="logo" />
-          </Link>
+            
+          </Link><Image width={120} height={120} src='/HH-logo.png' alt="logo" />
         </div>
         {/* links */}
-        <div className="flex gap-x-12 align-center">
+        <div className="flex gap-x-12 items-center">
           {navigation.map((item: NavigationType) => (
             <a
               key={item.name}
               href={item.href}
-              className="text-sm font-semibold leading-6 hover:text-blue-500"
+              className="text-sm font-semibold leading-6 text-neutral-900 hover:text-neutral-500"
             >
               {item.name}
             </a>
