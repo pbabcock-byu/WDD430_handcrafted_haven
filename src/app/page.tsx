@@ -24,7 +24,7 @@ const HomePage = () => {
             behind handmade items. Forget mass production; here, every piece has a
             soul.
           </p>
-          <Link href="/login" className="text-sm font-semibold leading-6">
+          <Link href="/sign-up-seller" className="text-sm font-semibold leading-6">
                 Join us as a Seller! <span aria-hidden="true">&larr;</span>
           </Link>
         </main>
