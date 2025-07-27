@@ -42,10 +42,20 @@ body {
   width: 960px;
   margin: 0 auto; /* centers the container */
 } 
- .homepage {
-  padding: 2rem;
-  border-radius: 0.5rem;
- }
+
+.homepage {
+padding: 2rem;
+border-radius: 0.5rem;
+}
+
+.loginbutton {
+background-color: #2563EB; /* Primary color */
+color: #F3F4F6; /* Gray light color */
+padding: 0.75rem 1.5rem;
+border-radius: 0.375rem;
+font-weight: bold;
+transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
 
 a:active {
   color: #ec0d0d; /* Color when link is being clicked */
@@ -57,4 +67,78 @@ a:visited {
 
 body {
   border: 10px solid #F3F4F6 !important;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem 0;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+label {
+  color: #374151; /* Gray dark color */
+  font-weight: bold;
+  left: 0.5rem;
+  padding: 0.5rem;
+  text-align-last: center;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 550px;
+  padding: 0.5rem;
+  border: 1px solid #D1D5DB; /* Gray medium color */
+  border-radius: 0.2rem;
+  box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+textarea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 550px;
+  padding: 0.5rem;
+  border: 1px solid #D1D5DB; /* Gray medium color */
+  border-radius: 0.2rem;
+  box-sizing: border-box; /* Ensures padding is included in width */
+  resize: vertical; /* Allows vertical resizing */
+  min-height: 200px; /* Minimum height for better usability */
+  }
+
+/* Button styles */
+.loginbutton,
+.signupseller {
+  display: block;       /* make button a block element */
+  margin: 1rem auto 0;  /* auto left/right margins center the button */
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  background-color: #2563EB; /* Primary color */
+  color: #F3F4F6;          /* Gray light color */
+  border-radius: 0.5rem; /* more rounded */
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.loginbutton:focus,
+.signupseller:focus {
+  outline: none; /* remove default focus outline */
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.5); /* add custom focus ring */
+}
+
+button:hover {
+  background-color: #1E40AF; /* darker on hover */
+  transform: scale(1.05);    /* slight grow effect */
 }

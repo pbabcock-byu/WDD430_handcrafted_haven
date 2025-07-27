@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import '../globals.css';
 
 export default function SignUpSellerPage() {
     const [name, setName] = useState('');
@@ -68,7 +69,7 @@ export default function SignUpSellerPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 font-sans">
+        <div className="form-group min-h-screen flex items-center justify-center bg-gray-100 p-4 font-sans">
             <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Sign Up as a Seller</h2>
 
@@ -199,7 +200,7 @@ export default function SignUpSellerPage() {
                     {/* Submit Button */}
                     <button
                         type="submit"
-                        className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition duration-200 ease-in-out transform hover:scale-105"
+                        className="signupseller w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition duration-200 ease-in-out transform hover:scale-105"
                         disabled={loading}
                     >
                         {loading ? 'Signing as Seller...' : 'Sign Up as Seller'}

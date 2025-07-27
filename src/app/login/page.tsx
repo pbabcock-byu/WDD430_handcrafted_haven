@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import '../globals.css';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -48,13 +49,13 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 font-sans">
-            <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+        <div >
+            {/* Login Form className="form-group bg-white p-8 rounded-lg shadow-xl w-full max-w-md"*/}
+            <div>
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
-
                 <form onSubmit={handleSubmit}>
                     {/* Email Input */}
-                    <div className="mb-4">
+                    <div className="form-group mb-4">
                         <label htmlFor="email" className="block text-gray-700 text-sm font-medium mb-2">
                             Email
                         </label>
@@ -70,7 +71,7 @@ export default function LoginPage() {
                     </div>
 
                     {/* Password Input */}
-                    <div className="mb-6">
+                    <div className="form-group mb-6">
                         <label htmlFor="password" className="block text-gray-700 text-sm font-medium mb-2">
                             Password
                         </label>
@@ -85,17 +86,17 @@ export default function LoginPage() {
                         />
                     </div>
 
-                    {/* Error Message Display */}
+                    {/* Error Message Display className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-4" role="alert"*/}
                     {error && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-4" role="alert">
                             <span className="block sm:inline">{error}</span>
                         </div>
                     )}
 
-                    {/* Submit Button */}
+                    {/* Submit Button w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 ease-in-out transform hover:scale-105*/}
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 ease-in-out transform hover:scale-105"
+                        className="loginbutton "
                         disabled={loading}
                     >
                         {loading ? 'Logging In...' : 'Login'}
