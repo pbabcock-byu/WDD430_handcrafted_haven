@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import './globals.css';
-import { inter , lusitana } from '@/app/ui/fonts';
+import '../app/globals.css';
+import { inter  } from '@/app/ui/fonts';
 
 // Import your header and footer components
 import Header from './components/Header';

@@ -1,12 +1,10 @@
 
 //you can use the next/image component to automatically optimize your images
-import Image from 'next/image';
 
-import styles from "./page.module.css";
+import './globals.css';
+
+
 import Link from "next/link";
-
-import Header from './components/Header';
-import Footer from './components/Footer';
 
 const HomePage = () => {
   return (
@@ -27,6 +25,11 @@ const HomePage = () => {
           <Link href="/sign-up-seller" className="text-sm font-semibold leading-6">
                 Join us as a Seller! <span aria-hidden="true">&larr;</span>
           </Link>
+          <br />
+          <br />
+          <div className="bg-red-500 text-white p-4">
+            If this background is red, Tailwind is working!
+          </div>
         </main>
       </div>
     </div>

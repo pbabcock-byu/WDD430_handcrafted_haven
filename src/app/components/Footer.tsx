@@ -8,10 +8,10 @@ const Footer = () => {
     <footer className="bg-neutral-800 py-5">
       <div className="flex flex-wrap gap-x-5 px-5">
 
-        <FooterElement title=' '>
+        {/*<FooterElement title=' '>
 
         </FooterElement>
-
+        */}
         <FooterElement title='Contact Us'>
 
           <p>Email: support@Handcrafted.com</p>
@@ -32,9 +32,10 @@ const Footer = () => {
             </a>
             
         </FooterElement>
-        <FooterElement title=' '>
+        {/*<FooterElement title=' '>
 
         </FooterElement>
+        */}
       </div>
       <div className='text-center mt-5 text-neutral-400'>
         <p>&copy; 2025 Handcrafted Haven. All rights reserved..</p>
