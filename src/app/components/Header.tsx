@@ -18,7 +18,7 @@ const navigation: NavigationType[] = [
 
 const Header = () => {
   return (
-    <header>
+    <header className='mainheader'>
       <nav
         className="flex items-center justify-between p-6 lg:p-8"
         aria-label="Global"
