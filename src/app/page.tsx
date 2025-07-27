@@ -8,9 +8,9 @@ import Link from "next/link";
 
 const HomePage = () => {
   return (
-    <div>
+    <div >
       <br />
-      <div>
+      <div className='homepage'>
         <main className="p-4">
           <h2>Testing header 2</h2>
           <br />

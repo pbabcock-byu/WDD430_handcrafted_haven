@@ -19,7 +19,7 @@
 }
 
 .mainheader {
-  background-color: #2563EB; /* Primary dark color */
+  background-color: #1E40AF; /* Primary dark color */
   color: #F3F4F6; /* Gray light color */
   padding: 1rem;
   text-align: center;
@@ -29,16 +29,23 @@
   color: #F3F4F6; /* Gray light color */
   text-align: center;
 }
-
+.navlinks {
+  display: flex;
+  gap: 1.5rem; /* Space between links */
+  color: #F3F4F6; /* Gray light color */
+}
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Inter,Lusitana;
-    width: 960px;
+  width: 960px;
   margin: 0 auto; /* centers the container */
 } 
-
+ .homepage {
+  padding: 2rem;
+  border-radius: 0.5rem;
+ }
 
 a:active {
   color: #ec0d0d; /* Color when link is being clicked */

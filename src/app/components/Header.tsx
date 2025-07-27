@@ -26,11 +26,10 @@ const Header = () => {
         {/* logo */}
         <div className="flex lg:flex-1">
           <Link href="/">
-            
           </Link><Image width={120} height={120} src='/HH-logo.png' alt="logo" />
         </div>
         {/* links */}
-        <div className="flex gap-x-12 items-center">
+        <div className="navlinks flex gap-x-12 items-center">
           {navigation.map((item: NavigationType) => (
             <a
               key={item.name}
