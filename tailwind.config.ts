@@ -8,13 +8,21 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: 'var(--font-inter)',
+        heading: 'var(--font-lusitana)',
+      },
       colors: {
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
         blue: '#2563EB',
         darkBlue: '#1E40AF',
         lightBlue: '#BFDBFE',
-        grayLight: '#F3F4F6',
-        grayMedium: '#9CA3AF',
-        grayDark: '#374151',
+        gray: {
+          light: '#F3F4F6',
+          medium: '#9CA3AF',
+          dark: '#374151',
+        },
       },
     },
   },

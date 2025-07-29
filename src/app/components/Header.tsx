@@ -1,10 +1,8 @@
+'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-//import logo from '@/public/HH-logo.png';
-import { NavigationType } from "./types";
-
-import React from "react";
-
+import { NavigationType } from './types';
+import React, { useEffect, useState } from 'react';
 
 const navigation: NavigationType[] = [
     { name: "Home", href: "./", id: 1 },
@@ -15,8 +13,17 @@ const navigation: NavigationType[] = [
     { name: "Sellers", href: "/sellers", id: 6 },
 ];
 
-
 const Header = () => {
+  const [isSeller, setIsSeller] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const role = localStorage.getItem('userRole');
+    const token = localStorage.getItem('authToken');
+    setIsSeller(role === 'seller');
+    setIsLoggedIn(!!token);
+  }, []);
+
   return (
     <header className='mainheader'>
       <nav
@@ -31,23 +38,29 @@ const Header = () => {
         {/* links */}
         <div className="navlinks flex gap-x-12 items-center">
           {navigation.map((item: NavigationType) => (
-            <a
+            <Link
               key={item.name}
               href={item.href}
               className="text-sm font-semibold leading-6 text-neutral-900 hover:text-neutral-500"
             >
               {item.name}
-            </a>
+            </Link>
           ))}
+          {isSeller && (
+            <Link href="/upload-product" className="text-sm font-semibold leading-6 text-blue-700 hover:underline">
+              + Upload Product
+            </Link>
+          )}
         </div>
-        {/* login */}
+
+        {/* Auth Buttons */}
         <div className="flex lg:flex-1 lg:justify-end lg:gap-4 pr-8">
-            <Link href="/login" className="text-sm font-semibold leading-6">
-                Log in <span aria-hidden="true">&larr;</span>
-            </Link>
-            <Link href="/sign-up" className="text-sm font-semibold leading-6">
-                Sign Up <span aria-hidden="true">&rarr;</span>
-            </Link>
+          <Link href="/login" className="text-sm font-semibold leading-6">
+            Log in <span aria-hidden="true">&larr;</span>
+          </Link>
+          <Link href="/sign-up" className="text-sm font-semibold leading-6">
+            Sign Up <span aria-hidden="true">&rarr;</span>
+          </Link>
         </div>
       </nav>
     </header>
@@ -55,4 +68,3 @@ const Header = () => {
 };
 
 export default Header;
-

@@ -5,48 +5,50 @@ import { useRouter } from 'next/navigation';
 import '../globals.css';
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-    const router = useRouter();
+  const router = useRouter();
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault(); 
-        setError(null); 
-        setLoading(true);
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setError(null);
+    setLoading(true);
 
-        try {
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }), 
-            });
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Login successful:', data);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Login successful:', data);
 
-                localStorage.setItem('authToken', data.token);
-                localStorage.setItem('userRole', data.user.role); 
-                localStorage.setItem('userName', data.user.name); 
-                localStorage.setItem('userId', data.user.userId);
-
-                router.push('/profile');
-            } else {
-                const errorData = await response.json();
-                setError(errorData.message || 'Login failed. Please check your credentials.');
-            }
-        } catch (err) {
-            console.error('Network error during login:', err);
-            setError('An unexpected error occurred. Please try again.');
-        } finally {
-            setLoading(false);
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('userRole', data.user.role);
+        localStorage.setItem('userName', data.user.name);
+        localStorage.setItem('userId', data.user.userId);
+        localStorage.setItem('isSeller', data.user.isSeller ? 'true' : 'false');
+        if (data.user.sellerId) {
+          localStorage.setItem('sellerId', data.user.sellerId);
         }
-    };
+
+        router.push('/profile');
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Login failed. Please check your credentials.');
+      }
+    } catch (err) {
+      console.error('Network error during login:', err);
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
     return (
         <div >
@@ -103,19 +105,19 @@ export default function LoginPage() {
                     </button>
                 </form>
 
-                <p className="text-center text-gray-600 text-sm mt-6">
-                    Don't have an account?{' '}
-                    <a href="/sign-up" className="text-blue-600 hover:underline font-medium">
-                        Sign up here
-                    </a>
-                </p>
-                <p className="text-center text-gray-600 text-sm mt-2">
-                    Are you a seller?{' '}
-                    <a href="/sign-up-seller" className="text-blue-600 hover:underline font-medium">
-                        Sign Up as a Seller
-                    </a>
-                </p>
-            </div>
-        </div>
-    );
+        <p className="text-center text-gray-600 text-sm mt-6">
+          Don't have an account?{' '}
+          <a href="/sign-up" className="text-blue-600 hover:underline font-medium">
+            Sign up here
+          </a>
+        </p>
+        <p className="text-center text-gray-600 text-sm mt-2">
+          Are you a seller?{' '}
+          <a href="/sign-up-seller" className="text-blue-600 hover:underline font-medium">
+            Sign Up as a Seller
+          </a>
+        </p>
+      </div>
+    </div>
+  );
 }
