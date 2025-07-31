@@ -11,3 +11,7 @@ Handcrafted Haven aims to revolutionize the way handcrafted items are discovered
 * Israel Carmona
 * Luis F. Galvez
 * Peter Babcock
+
+
+https://www.figma.com/design/0Yc5VbQCbklPEJDMOglszG/Minimal-Landing-Page-Design-%7C-Website-Home-Page-Design-%7C-Agency-Website-UI-Design--Community-?node-id=1-2&p=f
+

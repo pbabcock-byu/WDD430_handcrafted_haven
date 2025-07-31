@@ -1,72 +1,41 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+
+//you can use the next/image component to automatically optimize your images
+
+import './globals.css';
+
+
 import Link from "next/link";
 
-export default function Home() {
+const HomePage = () => {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <h1>Handcrafted Haven</h1>
-
-        <p>
-          Handcrafted Haven is your premier online marketplace for unique,
-          artisan-made products. We connect passionate crafters and creators
-          with discerning customers who cherish the beauty, quality, and story
-          behind handmade items. Forget mass production; here, every piece has a
-          soul.
-        </p>
-
-        <div className={styles.ctas}>
-          <nav>
-            <ul style={{ listStyle: "none", padding: 0 }}>
-              <li style={{ marginBottom: "1rem" }}>
-                <Link
-                  href="/"
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                    fontSize: "1.2rem",
-                  }}
-                >
-                  Home
-                </Link>
-              </li>
-              <li style={{ marginBottom: "1rem" }}>
-                <Link
-                  href="/sellers"
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                    fontSize: "1.2rem",
-                  }}
-                >
-                  Sellers
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/profile"
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                    fontSize: "1.2rem",
-                  }}
-                >
-                  My Profile
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://github.com/pbabcock-byu/WDD430_handcrafted_haven"
-          target="_blank"
-        >
-          GitHub Repo
-        </a>
-      </footer>
+    <div >
+      <br />
+      <div className='homepage'>
+        <main className="p-4">
+          <h2>Testing header 2</h2>
+          <br />
+          <br />
+          <p>
+            Handcrafted Haven is your premier online marketplace for unique,
+            artisan-made products. We connect passionate crafters and creators
+            with discerning customers who cherish the beauty, quality, and story
+            behind handmade items. Forget mass production; here, every piece has a
+            soul.
+          </p>
+          <Link href="/sign-up-seller" className="text-sm font-semibold leading-6">
+                Join us as a Seller! <span aria-hidden="true">&larr;</span>
+          </Link>
+          <br />
+          <br />
+          <div className="bg-red-500 text-white p-4">
+            If this background is red, Tailwind is working!
+          </div>
+        </main>
+      </div>
     </div>
   );
-}
+};
+
+export default HomePage;
+
+
