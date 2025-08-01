@@ -14,8 +14,8 @@
 */
 
 :root {
-  --background: #BFDBFE;
-  --foreground: #374151;
+  --background: #BFDBFE; /* Primary light color */
+  --foreground: #1E40AF; /* Primary dark color */
 }
 
 .mainheader {
