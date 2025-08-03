@@ -1,10 +1,13 @@
 'use client'
 import { useEffect, useState } from "react";
+import '../globals.css';
 
 type Seller = {
     id: string;
     name: string;
     bio: string;
+    email: string;
+    shop_name: string;
     profile_pic: string;
     story: string;
 };
@@ -25,6 +28,7 @@ export default function SellersPage() {
     fetchSellers();
   }, []);
 
+/*
   return (
     <main className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Featured Artisans</h1>
@@ -48,5 +52,37 @@ export default function SellersPage() {
       )}
     </main>
   );
+ 
+ */
+    return (
+    <main className="seller-container">
+      <h1 className="seller-heading">Featured Artisans</h1>
+      {sellers.length === 0 ? (
+        <p className="no-sellers">No sellers found yet.</p>
+      ) : (
+        <ul className="seller-grid">
+          {sellers.map((seller) => (
+            <li key={seller.id} className="seller-card">
+              <img
+                src={seller.profile_pic || '/images/profile_pics/default.jpg'}
+                alt={seller.name}
+                className="seller-image"
+              />
+              <h2 className="seller-name">{seller.name}</h2>
+              <p className="seller-bio"><strong>About Me:</strong><br></br>{seller.bio}</p>
+              <p className="seller-story"><strong>Sellers Story:</strong> <br></br>{seller.story}</p>
+              <p className="seller-shop"><strong>Shop Name: </strong> {seller.shop_name}</p>
+              <p className="seller-email"><strong>Email: </strong> {seller.email}</p>
+
+              <button className="view-products-btn">
+                View Listed Products
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </main>
+  );
+
 }
 

@@ -51,13 +51,13 @@ export default function LoginPage() {
   };
 
     return (
-        <div >
+        <div  className="form-group">
             {/* Login Form className="form-group bg-white p-8 rounded-lg shadow-xl w-full max-w-md"*/}
             <div>
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
                 <form onSubmit={handleSubmit}>
                     {/* Email Input */}
-                    <div className="form-group mb-4">
+                    <div className=" mb-4">
                         <label htmlFor="email" className="block text-gray-700 text-sm font-medium mb-2">
                             Email
                         </label>
@@ -73,7 +73,7 @@ export default function LoginPage() {
                     </div>
 
                     {/* Password Input */}
-                    <div className="form-group mb-6">
+                    <div className="mb-6">
                         <label htmlFor="password" className="block text-gray-700 text-sm font-medium mb-2">
                             Password
                         </label>

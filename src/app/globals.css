@@ -11,6 +11,27 @@
       grayMedium: '#9CA3AF',
       grayDark: '#374151',
 
+  Based off the design
+  Primary colors: #28CB8B green
+  Secondary colors: #263238 blackish gray
+  Info colors: #2194f3 blue
+
+  Neutral colors: #263238 blackish gray
+  Neutral colors: #4D4D4D dark gray
+  Neutral colors: #89939E light gray
+  Neutral colors: #ABBED1 gray-blue
+  Neutral colors: #F5F7FA white
+
+  Shades of primary color:
+  primary shade 1: #43A046 
+  primary shade 2: #388E3B  
+  primary shade 3: #237D31
+2
+
+  Action Warning: #FBC02D
+  Action Error: #E53935
+  Action Success: #2E7D31
+
 */
 
 :root {
@@ -141,4 +162,170 @@ textarea {
 button:hover {
   background-color: #1E40AF; /* darker on hover */
   transform: scale(1.05);    /* slight grow effect */
+}
+
+/* Product card styles */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+  padding: 0 24px;
+}
+
+.product-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  background-color: #f9f9f9; /* Optional: to show empty space */
+  display: block;
+  padding: 10px;
+}
+.product-details {
+  padding: 16px;
+}
+
+.product-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.product-category,
+.product-description,
+.product-price,
+.product-seller {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.rate-button {
+  margin-top: 12px;
+  padding: 10px 16px;
+  background-color: #2563eb; /* Blue-600 */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.rate-button:hover {
+  background-color: #1e40af; /* Blue-700 */
+}
+
+/* Container styles */
+.seller-container {
+  padding: 40px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Heading */
+.seller-heading {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+/* Message when no sellers */
+.no-sellers {
+  text-align: center;
+  color: #777;
+  font-size: 1rem;
+}
+
+/* Grid layout */
+.seller-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Card */
+.seller-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.seller-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Image */
+.seller-image {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 16px;
+}
+
+/* Text styles */
+.seller-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.seller-bio {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.seller-story {
+  font-size: 0.85rem;
+  color: #777;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.seller-shop,
+.seller-email {
+  font-size: 0.85rem;
+  color: #444;
+  margin-top: 4px;
+}
+
+.view-products-btn {
+  margin-top: 16px;
+  padding: 10px 16px;
+  background-color: #2563eb; /* blue-600 */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.view-products-btn:hover {
+  background-color: #1e40af; /* blue-800 */
 }

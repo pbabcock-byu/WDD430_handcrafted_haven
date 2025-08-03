@@ -71,72 +71,81 @@ export default function UploadProduct() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col px-4 sm:px-8 lg:px-16 py-12 bg-[var(--background)] text-[var(--foreground)] font-sans">
-      <h1 className="text-3xl font-bold mb-6">Upload a Product</h1>
-      {message && <p className="mb-4 text-red-500">{message}</p>}
+    <div className="form-group">
+      <main >
+        <h1 >Upload a Product</h1>
+        {message && <p >{message}</p>}
 
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
-        <input
-          name="title"
-          placeholder="Product Title"
-          value={formData.title}
-          onChange={handleChange}
-          required
-          className="w-full p-3 border rounded"
-        />
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={formData.description}
-          onChange={handleChange}
-          required
-          className="w-full p-3 border rounded"
-        />
-        <input
-          name="category"
-          placeholder="Category"
-          value={formData.category}
-          onChange={handleChange}
-          required
-          className="w-full p-3 border rounded"
-        />
-        <input
-          name="material"
-          placeholder="Material"
-          value={formData.material}
-          onChange={handleChange}
-          required
-          className="w-full p-3 border rounded"
-        />
-        <input
-          name="dimensions"
-          placeholder="Dimensions (e.g. 10 cm x 15 cm)"
-          value={formData.dimensions}
-          onChange={handleChange}
-          required
-          className="w-full p-3 border rounded"
-        />
-        <input
-          name="price"
-          type="number"
-          placeholder="Price"
-          value={formData.price}
-          onChange={handleChange}
-          required
-          className="w-full p-3 border rounded"
-        />
-        <input
-          name="image"
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          required
-          className="w-full"
-        />
-        <button type="submit" className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700">
-          Submit
-        </button>
-      </form>
-    </main>
+        <form onSubmit={handleSubmit} >
+          <input
+            name="title"
+            placeholder="Product Title"
+            value={formData.title}
+            onChange={handleChange}
+            className="form-group"
+            required
+
+          />
+          <textarea
+            name="description"
+            placeholder="Description"
+            className="form-group"
+            rows={6}
+            value={formData.description}
+            onChange={handleChange}
+            required
+
+          />
+          <input
+            name="category"
+            placeholder="Category"
+            className="form-group"
+            value={formData.category}
+            onChange={handleChange}
+            required
+
+          />
+          <input
+            name="material"
+            placeholder="Material"
+            className="form-group"
+            value={formData.material}
+            onChange={handleChange}
+            required
+
+          />
+          <input
+            name="dimensions"
+            placeholder="Dimensions (e.g. 10 cm x 15 cm)"
+            className="form-group"
+            value={formData.dimensions}
+            onChange={handleChange}
+            required
+
+          />
+          <input
+            name="price"
+            type="number"
+            className="form-group"
+            placeholder="Price"
+            value={formData.price}
+            onChange={handleChange}
+            required
+
+          />
+          <input
+            name="image"
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            required
+            className='form-group'
+          />
+          <button type="submit" className="loginbutton" >
+            Submit
+          </button>
+        </form>
+      </main>
+    </div>
   );
 }

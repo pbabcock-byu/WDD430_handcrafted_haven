@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import '../globals.css';
 
 export default function SignUpPage() {
     const [name, setName] = useState('');
@@ -50,8 +51,8 @@ export default function SignUpPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 font-sans">
-            <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+        <div className="form-group">
+            <div >
                 <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Sign Up</h2>
 
                 <form onSubmit={handleSubmit}>
@@ -120,7 +121,7 @@ export default function SignUpPage() {
                     {/* Submit Button */}
                     <button
                         type="submit"
-                        className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 ease-in-out transform hover:scale-105"
+                        className="loginbutton"
                         disabled={loading}
                     >
                         {loading ? 'Signing up...' : 'Sign Up'}

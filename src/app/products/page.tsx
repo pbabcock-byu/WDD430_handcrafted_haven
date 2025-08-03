@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ProductList from './ProductList';
+import '../globals.css';
 
 interface Product {
   id: string;
@@ -71,14 +72,14 @@ export default function ProductCatalogPage() {
   }, [search, category, priceRange, products]);
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-6 py-12 font-sans">
-      <h1 className="text-4xl font-heading text-center mb-8">Catalog</h1>
+    <div >
+      <h1 className="form-group">Catalog</h1>
 
-      <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div >
         <input
           type="text"
           placeholder="Search products..."
-          className="p-3 border rounded-lg w-full"
+          className="form-group"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -86,7 +87,7 @@ export default function ProductCatalogPage() {
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="p-3 border rounded-lg w-full"
+          className="form-group"
         >
           <option value="">All Categories</option>
           {[...new Set(products.map((p) => p.category))].map((cat) => (
@@ -97,7 +98,7 @@ export default function ProductCatalogPage() {
         <select
           value={priceRange}
           onChange={(e) => setPriceRange(e.target.value)}
-          className="p-3 border rounded-lg w-full"
+          className="form-group"
         >
           <option value="all">All Prices</option>
           <option value="low">Under $50</option>
