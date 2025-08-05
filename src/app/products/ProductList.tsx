@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { useRouter } from 'next/navigation'; // ✅ Import useRouter
 import '../globals.css';
 
 type Product = {
@@ -15,6 +16,56 @@ type Product = {
 interface Props {
   products: Product[];
 }
+
+export default function ProductList({ products }: Props) {
+  const router = useRouter(); // ✅ Initialize router
+
+  const handleRateClick = (id: string) => {
+    router.push(`/productreview?id=${id}`); // ✅ Navigate to review page
+  };
+
+  return (
+    <div className="product-grid">
+      {products.map((product) => (
+        <div key={product.id} className="product-card">
+          <img
+            src={product.image_url}
+            alt={product.title}
+            className="product-image"
+          />
+          <div className="product-details">
+            <h3 className="product-title">{product.title}</h3>
+
+            <p className="product-category">
+              <strong>Category:</strong> {product.category}
+            </p>
+
+            <p className="product-description">
+              <strong>Description:</strong> {product.description}
+            </p>
+
+            <p className="product-price">
+              <strong>Price:</strong> ${product.price}
+            </p>
+
+            {product.shop_name && (
+              <p className="product-seller">
+                <strong>Sold by:</strong> {product.shop_name}
+              </p>
+            )}
+
+            {/* ✅ Add onClick to navigate to product review */}
+            <button className="rate-button" onClick={() => handleRateClick(product.id)}>
+              Rate Product
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+
 /*
 export default function ProductList({ products }: Props) {
   return (
@@ -58,41 +109,4 @@ export default function ProductList({ products }: Props) {
   );
 }
 */
-export default function ProductList({ products }: Props) {
-  return (
-    <div className="product-grid">
-      {products.map((product) => (
-        <div key={product.id} className="product-card">
-          <img
-            src={product.image_url}
-            alt={product.title}
-            className="product-image"
-          />
-          <div className="product-details">
-            <h3 className="product-title">{product.title}</h3>
 
-            <p className="product-category">
-              <strong>Category:</strong> {product.category}
-            </p>
-
-            <p className="product-description">
-              <strong>Description:</strong> {product.description}
-            </p>
-
-            <p className="product-price">
-              <strong>Price:</strong> ${product.price}
-            </p>
-
-            {product.shop_name && (
-              <p className="product-seller">
-                <strong>Sold by:</strong> {product.shop_name}
-              </p>
-            )}
-
-            <button className="rate-button">Rate Product</button>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
