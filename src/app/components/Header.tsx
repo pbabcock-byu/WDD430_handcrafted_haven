@@ -1,8 +1,10 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
+import LogoutButton from "./LogoutButton";
 import { NavigationType } from './types';
 import React, { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 const navigation: NavigationType[] = [
     { name: "Home", href: "./", id: 1 },
@@ -16,13 +18,28 @@ const navigation: NavigationType[] = [
 const Header = () => {
   const [isSeller, setIsSeller] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
+  const pathname = usePathname();
 
-  useEffect(() => {
-    const role = localStorage.getItem('userRole');
-    const token = localStorage.getItem('authToken');
-    setIsSeller(role === 'seller');
-    setIsLoggedIn(!!token);
-  }, []);
+  const checkLoginStatus = () => {
+      const token = localStorage.getItem("authToken");
+      const role = localStorage.getItem("userRole");
+      const storedUserName = localStorage.getItem('userName');
+      
+      setIsLoggedIn(!!token);
+      setIsSeller(role === "seller");
+      setUserName(storedUserName);
+    };
+
+    useEffect(() => {
+      checkLoginStatus(); 
+
+      window.addEventListener('storage', checkLoginStatus);
+
+      return () => {
+          window.removeEventListener('storage', checkLoginStatus);
+      };
+  }, [pathname]);
 
   return (
     <header className='mainheader'>
@@ -55,12 +72,25 @@ const Header = () => {
 
         {/* Auth Buttons */}
         <div className="flex lg:flex-1 lg:justify-end lg:gap-4 pr-8">
-          <Link href="/login" className="text-sm font-semibold leading-6">
-            Log in <span aria-hidden="true">&larr;</span>
-          </Link>
-          <Link href="/sign-up" className="text-sm font-semibold leading-6">
-            Sign Up <span aria-hidden="true">&rarr;</span>
-          </Link>
+          {isLoggedIn ? ( 
+            <>
+              {userName && (
+                <Link href="/profile" className="text-lg text-white hover:text-purple-200 transition-colors duration-200 cursor-pointer">
+                  My Profile
+                </Link>
+              )}
+              <LogoutButton onLogoutSuccess={checkLoginStatus}/> 
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="text-lg text-white hover:text-purple-200 transition-colors duration-200">
+                Login
+              </Link>
+              <Link href="/sign-up" className="text-lg text-white hover:text-purple-200 transition-colors duration-200">
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </nav>
     </header>
