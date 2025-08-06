@@ -18,10 +18,10 @@ interface Props {
 }
 
 export default function ProductList({ products }: Props) {
-  const router = useRouter(); // ✅ Initialize router
+  const router = useRouter(); 
 
   const handleRateClick = (id: string) => {
-    router.push(`/productreview?id=${id}`); // ✅ Navigate to review page
+    router.push(`/productreview?id=${id}`); 
   };
 
   return (
@@ -54,7 +54,6 @@ export default function ProductList({ products }: Props) {
               </p>
             )}
 
-            {/* ✅ Add onClick to navigate to product review */}
             <button className="rate-button" onClick={() => handleRateClick(product.id)}>
               Rate Product
             </button>

@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import '../globals.css';
 
 type Seller = {
@@ -14,6 +15,7 @@ type Seller = {
 
 export default function SellersPage() {
   const [sellers, setSellers] = useState<Seller[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchSellers() {
@@ -29,7 +31,11 @@ export default function SellersPage() {
     fetchSellers();
   }, []);
 
-    return (
+  function handleViewProducts(sellerId: string) {
+    router.push(`/sellers/${sellerId}/products`);
+  }
+
+  return (
     <main className="seller-container">
       <h1 className="seller-heading">Featured Artisans</h1>
       {sellers.length === 0 ? (
@@ -44,12 +50,15 @@ export default function SellersPage() {
                 className="seller-image"
               />
               <h2 className="seller-name">{seller.name}</h2>
-              <p className="seller-bio"><strong>About Me:</strong><br></br>{seller.bio}</p>
-              <p className="seller-story"><strong>Sellers Story:</strong> <br></br>{seller.story}</p>
+              <p className="seller-bio"><strong>About Me:</strong><br />{seller.bio}</p>
+              <p className="seller-story"><strong>Sellers Story:</strong> <br />{seller.story}</p>
               <p className="seller-shop"><strong>Shop Name: </strong> {seller.shop_name}</p>
               <p className="seller-email"><strong>Email: </strong> {seller.email}</p>
 
-              <button className="view-products-btn">
+              <button
+                className="view-products-btn"
+                onClick={() => handleViewProducts(seller.id)}
+              >
                 View Listed Products
               </button>
             </li>
@@ -58,8 +67,10 @@ export default function SellersPage() {
       )}
     </main>
   );
-
 }
+
+
+
 
 
 /*
