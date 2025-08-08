@@ -1,8 +1,15 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { sql } from '@/lib/db';
 import jwt from 'jsonwebtoken';
+import { IncomingForm } from 'formidable';
+import path from 'path';
+import type { IncomingMessage } from 'http';
+import { Readable } from 'stream';
+ 
+export const dynamic = 'force-dynamic';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, context: { params : Promise<{ id: string }> }) {
+  const { id: productId } = await context.params;
   const authHeader = request.headers.get('authorization');
   const token = authHeader?.split(' ')[1];
   const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
@@ -14,10 +21,10 @@ export async function GET(request: Request, { params }: { params: { id: string }
   try {
     jwt.verify(token, JWT_SECRET);
     const [product] = await sql`
-      SELECT p.id, p.title, p.description, p.image_url, p.price, p.category, s.shop_name
+      SELECT p.id, p.title, p.description, p.image_url, p.price, p.category, p.seller_id, s.shop_name
       FROM products p
       JOIN sellers s ON p.seller_id = s.id
-      WHERE p.id = ${params.id}
+      WHERE p.id = ${productId}
     `;
 
     if (!product) {
@@ -29,3 +36,79 @@ export async function GET(request: Request, { params }: { params: { id: string }
     return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
   }
 }
+
+function convertNextRequestToNodeRequest(req: NextRequest): IncomingMessage {
+  const readable = Readable.from(req.body as any); 
+  const headers = Object.fromEntries(req.headers.entries());
+
+  return Object.assign(readable, { headers }) as unknown as IncomingMessage;
+}
+
+export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id: productId } = await context.params;
+
+  const authHeader = req.headers.get('authorization');
+  const token = authHeader?.split(' ')[1];
+  const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
+
+  if (!token) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  let sellerId;
+  try {
+    const payload = jwt.verify(token, JWT_SECRET) as any;
+    sellerId = payload?.sellerId;
+    if (!sellerId) throw new Error();
+  } catch {
+    return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
+  }
+
+  const [product] = await sql`
+    SELECT * FROM products WHERE id = ${productId}
+  `;
+
+  if (!product || product.seller_id !== sellerId) {
+    return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+  }
+
+  const form = new IncomingForm({
+    multiples: false,
+    uploadDir: path.join(process.cwd(), '/public/uploads'),
+    keepExtensions: true,
+  });
+
+  const data: any = await new Promise((resolve, reject) => {
+    const nodeReq = convertNextRequestToNodeRequest(req);
+    form.parse(nodeReq, (err, fields, files) => {
+      if (err) return reject(err);
+      resolve({ fields, files });
+    });
+  });
+
+  const { title, description, price } = data.fields as Record<string, string>;
+  let image_url = product.image_url;
+
+  const imageFile = (data.files as any)?.image?.[0];
+  if (imageFile?.filepath) {
+    const filename = path.basename(imageFile.filepath);
+    image_url = `/uploads/${filename}`;
+  }
+
+  await sql`
+    UPDATE products
+    SET title = ${title},
+        description = ${description},
+        price = ${price},
+        image_url = ${image_url}
+    WHERE id = ${productId}
+  `;
+
+  return NextResponse.json({ success: true });
+}
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};

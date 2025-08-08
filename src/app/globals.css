@@ -230,6 +230,22 @@ button:hover {
   background-color: #1e40af; /* Blue-700 */
 }
 
+.edit-button {
+  margin-top: 12px;
+  padding: 10px 16px;
+  background-color: #2563eb; /* Blue-600 */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #1e40af; /* Blue-700 */
+}
+
 /* Container styles */
 .seller-container {
   padding: 40px 24px;

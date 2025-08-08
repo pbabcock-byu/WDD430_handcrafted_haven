@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   try {
     jwt.verify(token, JWT_SECRET);
     const products = await sql`
-      SELECT p.id, p.title, p.description, p.image_url, p.price, p.category, s.shop_name
+      SELECT p.id, p.title, p.description, p.image_url, p.price, p.category, p.seller_id, s.shop_name
       FROM products p
       JOIN sellers s ON p.seller_id = s.id
     `;

@@ -11,6 +11,7 @@ type Product = {
   price: number;
   category: string;
   shop_name: string | null;
+  seller_id?: string; 
 };
 
 interface Props {
@@ -23,6 +24,19 @@ export default function ProductList({ products }: Props) {
   const handleRateClick = (id: string) => {
     router.push(`/productreview?id=${id}`); 
   };
+
+  {/* Get the sellerId from the JWT token to know if the person viewing the products is a seller.*/}
+  const token = typeof window !== 'undefined' ? localStorage.getItem("authToken") : null;
+  let sellerId = null;
+
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      sellerId = payload.sellerId;
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
 
   return (
     <div className="product-grid">
@@ -57,6 +71,14 @@ export default function ProductList({ products }: Props) {
             <button className="rate-button" onClick={() => handleRateClick(product.id)}>
               Rate Product
             </button>
+
+            {/* Button to edit products if you're the owner of that product */}
+            {String(product.seller_id) === String(sellerId) && (
+              <button className="edit-button" onClick={() => router.push(`/edit-product/${product.id}`)}>
+                Edit Product
+              </button>
+            )}
+
           </div>
         </div>
       ))}
