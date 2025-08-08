@@ -1,25 +1,27 @@
-import { NextResponse } from 'next/server';
-import { sql } from '@/lib/db';
-import jwt from 'jsonwebtoken';
+import { NextResponse } from 'next/server'
+import { sql } from '@/lib/db'
 
-export async function GET(request: Request) {
-  const authHeader = request.headers.get('authorization');
-  const token = authHeader?.split(' ')[1];
-  const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
+export const dynamic = 'force-dynamic' 
 
-  if (!token) {
-    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-  }
-
+export async function GET() {
   try {
-    jwt.verify(token, JWT_SECRET);
     const products = await sql`
-      SELECT p.id, p.title, p.description, p.image_url, p.price, p.category, p.seller_id, s.shop_name
+      SELECT 
+        p.id,
+        p.title,
+        p.description,
+        p.image_url,
+        p.price,
+        p.category,
+        p.seller_id,
+        s.shop_name
       FROM products p
       JOIN sellers s ON p.seller_id = s.id
-    `;
-    return NextResponse.json({ products }, { status: 200 });
-  } catch {
-    return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
+      ORDER BY p.created_at DESC
+    `
+    return NextResponse.json({ products }, { status: 200 })
+  } catch (err) {
+    console.error(err)
+    return NextResponse.json({ message: 'Server error' }, { status: 500 })
   }
 }

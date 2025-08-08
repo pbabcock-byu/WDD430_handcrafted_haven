@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import ProductList from './ProductList';
 import '../globals.css';
 
@@ -21,35 +20,26 @@ export default function ProductCatalogPage() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
   const [priceRange, setPriceRange] = useState('all');
-  const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      router.push('/login');
-      return;
-    }
-
     const fetchProducts = async () => {
       try {
-        const res = await fetch('/api/products', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res.ok) {
-          const data = await res.json();
-          const validProducts = data.products.filter((p: Product) => p.title);
-          setProducts(validProducts);
-          setFiltered(validProducts);
-        } else {
-          router.push('/login');
+        const res = await fetch('/api/products');
+        if (!res.ok) {
+          console.error('Failed to fetch products');
+          return;
         }
+        const data = await res.json();
+        const validProducts = data.products.filter((p: Product) => p.title);
+        setProducts(validProducts);
+        setFiltered(validProducts);
       } catch (err) {
-        router.push('/login');
+        console.error(err);
       }
     };
 
     fetchProducts();
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     let temp = [...products];
@@ -72,10 +62,10 @@ export default function ProductCatalogPage() {
   }, [search, category, priceRange, products]);
 
   return (
-    <div >
+    <div>
       <h1 className="form-group">Catalog</h1>
 
-      <div >
+      <div>
         <input
           type="text"
           placeholder="Search products..."
