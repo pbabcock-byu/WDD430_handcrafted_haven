@@ -213,12 +213,6 @@ export default function SignUpSellerPage() {
                         Login here
                     </a>
                 </p>
-                <p className="text-center text-gray-600 text-sm mt-2">
-                    Just want to browse?{' '}
-                    <a href="/sign-up" className="text-blue-600 hover:underline font-medium">
-                        Sign up as a customer
-                    </a>
-                </p>
             </div>
         </div>
     );

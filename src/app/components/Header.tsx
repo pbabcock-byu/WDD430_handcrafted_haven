@@ -86,9 +86,6 @@ const Header = () => {
               <Link href="/login" className="text-lg text-white hover:text-purple-200 transition-colors duration-200">
                 Login
               </Link>
-              <Link href="/sign-up" className="text-lg text-white hover:text-purple-200 transition-colors duration-200">
-                Sign Up
-              </Link>
             </>
           )}
         </div>

@@ -214,25 +214,6 @@ export default function ProfilePage() {
                         <span className="font-semibold">Email:</span> {userProfile.email}
                     </p>
 
-                    {/* Customer*/}
-                    {userProfile.role === 'user' && (
-                        <>
-                            <div className="mt-8 pt-4 border-t border-gray-200">
-                                <h3 className="text-2xl font-bold text-gray-800 mb-4">Your Activity</h3>
-                                <p className="text-gray-600">
-                                    Here you will see your recent reviews and favorite items.
-                                </p>
-                                <Link href="/reviews" className="text-blue-600 hover:underline mt-2 inline-block">
-                                    Reviews
-                                </Link>
-                                <br/>
-                                <Link href="/favorites" className="text-blue-600 hover:underline mt-2 inline-block">
-                                    Favorite Products
-                                </Link>
-                            </div>
-                        </>
-                    )}
-
                     {/* Seller */}
                     {userProfile.role === 'seller' && (
                         <>
