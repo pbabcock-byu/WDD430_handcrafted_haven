@@ -12,7 +12,7 @@ const HomePage = () => {
       <br />
       <div className='homepage'>
         <main className="p-4">
-          <h2>Testing header 2</h2>
+          <h2>Welcome to Handcrafted Haven</h2>
           <br />
           <br />
           <p>
@@ -22,14 +22,17 @@ const HomePage = () => {
             behind handmade items. Forget mass production; here, every piece has a
             soul.
           </p>
+
+          <br />
+          <div>
+              <a href="#" aria-label="mainpageimage">
+                <img src="/images/mainpageimage.png" alt="Marketplace Items " style={{ padding: '8px' }}className="mainpageimage" />
+            </a>
+          </div>
+          <br />
           <Link href="/sign-up-seller" className="text-sm font-semibold leading-6">
                 Join us as a Seller! <span aria-hidden="true">&larr;</span>
           </Link>
-          <br />
-          <br />
-          <div className="bg-red-500 text-white p-4">
-            If this background is red, Tailwind is working!
-          </div>
         </main>
       </div>
     </div>

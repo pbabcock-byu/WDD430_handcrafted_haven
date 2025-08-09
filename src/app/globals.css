@@ -302,6 +302,14 @@ button:hover {
   margin-bottom: 16px;
 }
 
+.mainpageimage {
+  width: 95%;
+  height: 96px;
+  object-fit: cover;
+  margin-bottom: 16px;
+}
+
+
 /* Text styles */
 .seller-name {
   font-size: 1.2rem;

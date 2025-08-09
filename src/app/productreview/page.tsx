@@ -18,6 +18,7 @@ export default function ProductReviewPage() {
   const [rating, setRating] = useState('');
   const [comment, setComment] = useState('');
 
+
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (!productId || !token) return;
@@ -104,8 +105,9 @@ export default function ProductReviewPage() {
             required
           />
         </label>
-
-        <button type="submit">Submit Review</button>
+        <button type="submit" className="loginbutton" >
+          Submit
+        </button>
       </form>
     </div>
   );

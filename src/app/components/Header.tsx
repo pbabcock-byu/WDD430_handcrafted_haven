@@ -8,10 +8,10 @@ import { usePathname } from 'next/navigation';
 
 const navigation: NavigationType[] = [
     { name: "Home", href: "./", id: 1 },
-    { name: "About", href: "/about", id: 2 },
+    //{ name: "About", href: "/about", id: 2 },
     { name: "Products", href: "/products", id: 3 },
-    { name: "Reviews", href: "/reviews", id: 4 },
-    { name: "Artisans", href: "/artisans", id: 5 },
+    //{ name: "Reviews", href: "/reviews", id: 4 },
+    //{ name: "Artisans", href: "/artisans", id: 5 },
     { name: "Sellers", href: "/sellers", id: 6 },
 ];
 
@@ -71,7 +71,7 @@ const Header = () => {
         </div>
 
         {/* Auth Buttons */}
-        <div className="flex lg:flex-1 lg:justify-end lg:gap-4 pr-8">
+        <div className="navlinks flex lg:flex-1 lg:justify-end lg:gap-4 pr-8">
           {isLoggedIn ? ( 
             <>
               {userName && (
