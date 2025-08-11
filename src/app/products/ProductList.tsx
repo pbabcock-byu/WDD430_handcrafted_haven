@@ -1,7 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'; // ✅ Import useRouter
+import { useRouter } from 'next/navigation'; 
 import '../globals.css';
+import { getSellerProducts, getSellerInfo } from '@/lib/queries';
 
 type Product = {
   id: string;
@@ -23,11 +24,12 @@ interface Props {
 export default function ProductList({ products }: Props) {
   const router = useRouter(); 
 
+
   const handleRateClick = (id: string) => {
     router.push(`/productreview?id=${id}`); 
   };
 
-  // Use state and useEffect to safely get sellerId on client only
+
   const [sellerId, setSellerId] = useState<string | null>(null);
 
   useEffect(() => {
