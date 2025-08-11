@@ -12,7 +12,11 @@ interface Product {
   image_url: string;
   category: string;
   shop_name: string | null;
+  seller_id?: string;
+  avg_rating?: number;      
+  rating_count?: number;   
 }
+
 
 export default function ProductCatalogPage() {
   const [products, setProducts] = useState<Product[]>([]);

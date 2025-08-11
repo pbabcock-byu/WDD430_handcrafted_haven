@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // ✅ Import useRouter
 import '../globals.css';
 
@@ -12,6 +12,8 @@ type Product = {
   category: string;
   shop_name: string | null;
   seller_id?: string; 
+  avg_rating?: number;     
+  rating_count?: number;    
 };
 
 interface Props {
@@ -25,18 +27,20 @@ export default function ProductList({ products }: Props) {
     router.push(`/productreview?id=${id}`); 
   };
 
-  {/* Get the sellerId from the JWT token to know if the person viewing the products is a seller.*/}
-  const token = typeof window !== 'undefined' ? localStorage.getItem("authToken") : null;
-  let sellerId = null;
+  // Use state and useEffect to safely get sellerId on client only
+  const [sellerId, setSellerId] = useState<string | null>(null);
 
-  if (token) {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      sellerId = payload.sellerId;
-    } catch (error) {
-      console.error("Invalid token");
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        setSellerId(payload.sellerId);
+      } catch (error) {
+        console.error("Invalid token");
+      }
     }
-  }
+  }, []);
 
   return (
     <div className="product-grid">
@@ -56,6 +60,13 @@ export default function ProductList({ products }: Props) {
 
             <p className="product-description">
               <strong>Description:</strong> {product.description}
+            </p>
+
+            <p className="product-rating">
+              <strong>Rating:</strong>{' '}
+              {product.rating_count && product.rating_count > 0 && !isNaN(Number(product.avg_rating))
+                ? `${Number(product.avg_rating).toFixed(1)} (${product.rating_count} review${product.rating_count > 1 ? 's' : ''})`
+                : 'No rating'}
             </p>
 
             <p className="product-price">
@@ -85,49 +96,3 @@ export default function ProductList({ products }: Props) {
     </div>
   );
 }
-
-
-/*
-export default function ProductList({ products }: Props) {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-10 px-4 sm:px-6 lg:px-8">
-      {products.map((product) => (
-        <div
-          key={product.id}
-          className="bg-white dark:bg-[var(--card-bg)] rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700"
-        >
-          <img
-            src={product.image_url}
-            alt={product.title}
-            className="w-full h-48 object-cover"
-          />
-          <div className="p-4">
-            <h3 className="text-lg font-bold text-gray-800 dark:text-white">
-              {product.title}
-            </h3>
-
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              <span className="font-semibold">Category:</span> {product.category}
-            </p>
-
-            <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 line-clamp-2">
-              <span className="font-semibold">Description:</span> {product.description}
-            </p>
-
-            <p className="text-base font-semibold text-blue-600 dark:text-blue-400 mt-2">
-              <span className="font-semibold">Price:</span> ${product.price}
-            </p>
-
-            {product.shop_name && (
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                <span className="font-semibold">Sold by:</span> {product.shop_name}
-              </p>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-*/
-

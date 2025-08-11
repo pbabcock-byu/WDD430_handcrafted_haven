@@ -46,9 +46,6 @@ export default async function SellerProductsPage({ params }: SellerProductsPageP
                   <p className="product-price">
                     <strong>Price:</strong> ${product.price}
                   </p>
-                  <p className="product-rating">
-                    <strong>Product Rating :</strong> 5.0
-                  </p>
                 </div>
               </div>
             ))}

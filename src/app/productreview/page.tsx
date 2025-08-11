@@ -17,7 +17,8 @@ export default function ProductReviewPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [rating, setRating] = useState('');
   const [comment, setComment] = useState('');
-
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -60,14 +61,23 @@ export default function ProductReviewPage() {
       });
 
       if (res.ok) {
-        alert('Review submitted!');
+        setSuccessMessage('Review successfully submitted!');
+        setErrorMessage('');
         setRating('');
         setComment('');
+
+        // Clear message after 3 seconds
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 3000);
       } else {
-        alert('Failed to submit review');
+        setErrorMessage('Failed to submit review');
+        setSuccessMessage('');
       }
     } catch (err) {
       console.error('Review submission failed:', err);
+      setErrorMessage('Review submission failed');
+      setSuccessMessage('');
     }
   };
 
@@ -105,10 +115,23 @@ export default function ProductReviewPage() {
             required
           />
         </label>
-        <button type="submit" className="loginbutton" >
+        <button type="submit" className="loginbutton">
           Submit
         </button>
       </form>
+
+      {/* Show success or error messages inline */}
+      {successMessage && (
+        <div className="success-message" role="alert" style={{ color: 'green', marginTop: '1rem' }}>
+          {successMessage}
+        </div>
+      )}
+
+      {errorMessage && (
+        <div className="error-message" role="alert" style={{ color: 'red', marginTop: '1rem' }}>
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 }
