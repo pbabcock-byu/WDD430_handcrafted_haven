@@ -83,7 +83,7 @@ a:active {
 }
 
 a:visited {
-  color: #a855f7; /* Color after link has been visited */
+  color: #ABBED1; /* Color after link has been visited */
 }
 
 body {
@@ -154,7 +154,8 @@ textarea {
 }
 
 .loginbutton:focus,
-.signupseller:focus {
+.signupseller:focus,
+button:focus {
   outline: none; /* remove default focus outline */
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.5); /* add custom focus ring */
 }

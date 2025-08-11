@@ -1,6 +1,3 @@
-
-//you can use the next/image component to automatically optimize your images
-
 import './globals.css';
 
 

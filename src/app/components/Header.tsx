@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 const navigation: NavigationType[] = [
-    { name: "Home", href: "./", id: 1 },
+    { name: "Home", href: "/", id: 1 },
     //{ name: "About", href: "/about", id: 2 },
     { name: "Products", href: "/products", id: 3 },
     //{ name: "Reviews", href: "/reviews", id: 4 },
@@ -83,7 +83,7 @@ const Header = () => {
             </>
           ) : (
             <>
-              <Link href="/login" className="text-lg text-white hover:text-purple-200 transition-colors duration-200">
+              <Link href="/login" className="loginbuttontext-lg text-white hover:text-purple-200 transition-colors duration-200">
                 Login
               </Link>
             </>

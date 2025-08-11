@@ -123,7 +123,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
   let userId;
   try {
     const payload = jwt.verify(token, JWT_SECRET) as any;
-    userId = payload?.userId; // Make sure your JWT includes userId
+    userId = payload?.userId; 
     if (!userId) throw new Error('Invalid token payload');
   } catch {
     return NextResponse.json({ message: 'Invalid token' }, { status: 401 });

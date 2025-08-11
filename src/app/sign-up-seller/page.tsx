@@ -35,7 +35,6 @@ export default function SignUpSellerPage() {
                 story,      
             };
 
-            // Send data to the new seller sign-up API route
             const response = await fetch('/api/sign-up-seller', {
                 method: 'POST',
                 headers: {

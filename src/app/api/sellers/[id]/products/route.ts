@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSellerProducts } from '@/lib/queries';
 
-export const runtime = 'nodejs'; // ✅ Required for postgres to work
+export const runtime = 'nodejs'; 
 
 export async function GET(
   request: NextRequest,

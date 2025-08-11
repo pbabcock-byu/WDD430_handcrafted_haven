@@ -19,7 +19,7 @@ interface SellerProductsPageProps {
 }
 
 export default async function SellerProductsPage({ params }: SellerProductsPageProps) {
-  const { id: sellerId } = await params;  // <-- await here to satisfy Next.js
+  const { id: sellerId } = await params;  
 
   const products: Product[] = await getSellerProductsWithRatings(sellerId);
   const seller = await getSellerInfo(sellerId);
