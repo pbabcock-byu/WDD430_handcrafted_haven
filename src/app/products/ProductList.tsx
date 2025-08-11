@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; 
 import '../globals.css';
-import { getSellerProducts, getSellerInfo } from '@/lib/queries';
+
 
 type Product = {
   id: string;

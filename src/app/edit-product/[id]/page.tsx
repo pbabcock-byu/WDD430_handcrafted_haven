@@ -3,10 +3,20 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 
+interface Product {
+  id: string
+  title: string
+  description: string
+  price: number
+  image_url?: string
+  seller_id: string
+  [key: string]: unknown
+}
+
 export default function EditProductPage() {
-  const [product, setProduct] = useState<any>(null)
+  const [product, setProduct] = useState<Product | null>(null)
   const router = useRouter()
-  const { id } = useParams<{ id: string }>() 
+  const { id } = useParams<{ id: string }>()
 
   const [token, setToken] = useState<string | null>(null)
   const [sellerId, setSellerId] = useState<string | null>(null)
@@ -15,7 +25,7 @@ export default function EditProductPage() {
     const t = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null
     if (t) {
       try {
-        const payload = JSON.parse(atob(t.split('.')[1]))
+        const payload = JSON.parse(atob(t.split('.')[1])) as { sellerId?: string }
         setToken(t)
         setSellerId(payload.sellerId ?? null)
       } catch (e) {
@@ -32,7 +42,7 @@ export default function EditProductPage() {
         const res = await fetch(`/api/products/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
-        const data = await res.json()
+        const data: { product?: Product; message?: string } = await res.json()
 
         if (!res.ok) {
           alert(data.message || 'Failed to fetch product')
