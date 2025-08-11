@@ -84,7 +84,16 @@ export default function ProductList({ products }: Props) {
             <button className="rate-button" onClick={() => handleRateClick(product.id)}>
               Rate Product
             </button>
-
+            
+            {product.rating_count && product.rating_count > 0 && (
+              <button
+                className="view-reviews-button"
+                onClick={() => router.push(`/products/${product.id}`)}
+              >
+                View Review{product.rating_count > 1 ? 's' : ''}
+              </button>
+            )}
+            
             {/* Button to edit products if you're the owner of that product */}
             {String(product.seller_id) === String(sellerId) && (
               <button className="edit-button" onClick={() => router.push(`/edit-product/${product.id}`)}>

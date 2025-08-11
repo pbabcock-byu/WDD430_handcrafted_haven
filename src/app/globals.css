@@ -215,7 +215,8 @@ button:hover {
   margin-bottom: 6px;
 }
 
-.rate-button {
+.rate-button,
+.view-reviews-button {
   margin-top: 12px;
   padding: 10px 16px;
   background-color: #2563eb; /* Blue-600 */
@@ -227,14 +228,15 @@ button:hover {
   transition: background-color 0.3s ease;
 }
 
-.rate-button:hover {
+.rate-button:hover,
+view-reviews-button:hover {
   background-color: #1e40af; /* Blue-700 */
 }
 
 .edit-button {
   margin-top: 12px;
   padding: 10px 16px;
-  background-color: #2563eb; /* Blue-600 */
+  background-color: #25deeb; /* Blue-600 */
   color: white;
   border: none;
   border-radius: 8px;

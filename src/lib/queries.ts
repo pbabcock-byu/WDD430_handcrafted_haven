@@ -13,6 +13,50 @@ export type Product = {
   rating_count?: number;
 };
 
+export async function getProductById(productId: string) {
+  const result = await sql`
+    SELECT 
+      p.id,
+      p.title,
+      p.description,
+      p.price,
+      p.category,
+      p.image_url,
+      COALESCE(AVG(r.rating), 0) AS avg_rating,
+      COUNT(r.id) AS rating_count
+    FROM products p
+    LEFT JOIN reviews r ON p.id = r.product_id
+    WHERE p.id = ${productId}
+    GROUP BY p.id
+    LIMIT 1
+  `;
+
+  if (result.length === 0) return null;
+
+  const product = result[0];
+  return {
+    ...product,
+    avg_rating: Number(product.avg_rating),     // convert from string to number
+    rating_count: Number(product.rating_count), // convert from string to number
+  };
+}
+
+export async function getReviewsByProductId(productId: string): Promise<Review[]> {
+  const reviews = await sql<Review[]>`
+    SELECT
+      reviews.id,
+      reviews.rating,
+      reviews.comment,
+      users.name AS reviewer_name,
+      reviews.created_at
+    FROM reviews
+    JOIN users ON reviews.user_id = users.id
+    WHERE reviews.product_id = ${productId}
+  `;
+
+  return reviews;
+}
+
 export async function getSellers() {
     return await sql`
     SELECT
