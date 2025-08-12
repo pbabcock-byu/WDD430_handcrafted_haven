@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import '../globals.css';
 
 interface Product {
@@ -87,10 +88,18 @@ export default function ProductReviewPage() {
 
   return (
     <div className="review-container">
-      <h1>Review: {product.title}</h1>
+      <h1 className="review-container">Review: {product.title}</h1>
 
-      <div className="product-info">
-        <img src={product.image_url} alt={product.title} className="review-image" />
+      <div className="review-container product-info" style={{ position: 'relative', width: '300px', height: '300px' }}>
+        <Image
+          src={product.image_url}
+          alt={product.title}
+          fill
+          style={{ objectFit: 'contain', padding: '8px' }}
+          className="review-image"
+          sizes="(max-width: 768px) 100vw, 300px"
+          priority
+        />
         <p><strong>Price:</strong> ${product.price}</p>
       </div>
 

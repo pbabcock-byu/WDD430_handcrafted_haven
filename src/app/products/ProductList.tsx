@@ -1,8 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; 
+import Image from 'next/image';
 import '../globals.css';
-
 
 type Product = {
   id: string;
@@ -24,11 +24,9 @@ interface Props {
 export default function ProductList({ products }: Props) {
   const router = useRouter(); 
 
-
   const handleRateClick = (id: string) => {
     router.push(`/productreview?id=${id}`); 
   };
-
 
   const [sellerId, setSellerId] = useState<string | null>(null);
 
@@ -48,11 +46,18 @@ export default function ProductList({ products }: Props) {
     <div className="product-grid">
       {products.map((product) => (
         <div key={product.id} className="product-card">
-          <img
-            src={product.image_url}
-            alt={product.title}
-            className="product-image"
-          />
+          <div style={{ position: 'relative', width: 250, height: 300 }}>
+            <Image
+              src={product.image_url}
+              alt={product.title}
+              fill
+              style={{ objectFit: 'contain' }}
+              sizes="(max-width: 768px) 100vw, 300px"
+              priority={true}
+              className="product-image"
+            />
+          </div>
+
           <div className="product-details">
             <h3 className="product-title">{product.title}</h3>
 
@@ -84,7 +89,7 @@ export default function ProductList({ products }: Props) {
             <button className="rate-button" onClick={() => handleRateClick(product.id)}>
               Rate Product
             </button>
-            
+
             {product.rating_count && product.rating_count > 0 && (
               <button
                 className="view-reviews-button"
@@ -93,14 +98,12 @@ export default function ProductList({ products }: Props) {
                 View Review{product.rating_count > 1 ? 's' : ''}
               </button>
             )}
-            
-            {/* Button to edit products if you're the owner of that product */}
+
             {String(product.seller_id) === String(sellerId) && (
               <button className="edit-button" onClick={() => router.push(`/edit-product/${product.id}`)}>
                 Edit Product
               </button>
             )}
-
           </div>
         </div>
       ))}

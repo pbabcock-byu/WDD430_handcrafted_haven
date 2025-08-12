@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { getProductById, getReviewsByProductId } from '@/lib/queries';
 import '../../globals.css';
 
@@ -38,7 +39,18 @@ export default async function ProductDetailPage({ params }: ProductDetailProps) 
     <div className="product-grid">
       <div className="product-card">
         <h2>{product.title}</h2>
-        <img className="product-image" src={product.image_url} alt={product.title} />
+
+        <div style={{ position: 'relative', width: '100%', height: 300, marginBottom: '1rem' }}>
+          <Image
+            src={product.image_url || '/images/default-product.jpg'}
+            alt={product.title}
+            fill
+            style={{ objectFit: 'contain' }}
+            sizes="(max-width: 768px) 100vw, 600px"
+            priority
+          />
+        </div>
+
         <p><strong>Description:</strong> {product.description}</p>
         <p><strong>Category:</strong> {product.category}</p>
         <p className="product-rating">

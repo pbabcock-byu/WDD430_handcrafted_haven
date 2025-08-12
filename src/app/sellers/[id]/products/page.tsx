@@ -1,4 +1,5 @@
 import '../../../globals.css';
+import Image from 'next/image';
 import { getSellerProductsWithRatings, getSellerInfo } from '@/lib/queries';
 
 interface Product {
@@ -27,17 +28,22 @@ export default async function SellerProductsPage({ params }: SellerProductsPageP
   return (
     <div>
       <h1 className="c">
-        {seller?.shop_name || seller?.name}'s Products
+        {seller?.shop_name || seller?.name}&apos;s Products
       </h1>
 
       <div className="product-grid">
         {products.map((product) => (
           <div key={product.id} className="product-card">
-            <img
-              src={product.image_url}
-              alt={product.title}
-              className="product-image"
-            />
+            <div style={{ position: 'relative', width: '100%', height: 250 }}>
+              <Image
+                src={product.image_url || '/images/default-product.jpg'}
+                alt={product.title}
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="(max-width: 768px) 100vw, 300px"
+                priority
+              />
+            </div>
             <div className="product-details">
               <h2 className="product-title">{product.title}</h2>
               <p className="product-category">

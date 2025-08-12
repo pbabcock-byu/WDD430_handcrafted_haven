@@ -1,6 +1,8 @@
-'use client'
+'use client';
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import '../globals.css';
 
 type Seller = {
@@ -22,7 +24,7 @@ export default function SellersPage() {
       try {
         const res = await fetch('/api/sellers');
         const data = await res.json();
-        setSellers(data);
+        setSellers(data.sellers || data); // fallback if data is nested
         console.log('Loaded sellers:', data.sellers || data);
       } catch (error) {
         console.error('Failed to load sellers:', error);
@@ -44,11 +46,16 @@ export default function SellersPage() {
         <ul className="seller-grid">
           {sellers.map((seller) => (
             <li key={seller.id} className="seller-card">
-              <img
-                src={seller.profile_pic || '/images/profile_pics/default.jpg'}
-                alt={seller.name}
-                className="seller-image"
-              />
+              <div className="seller-image-wrapper" style={{ position: 'relative', width: 150, height: 150 }}>
+                <Image
+                  src={seller.profile_pic || '/images/profile_pics/default.jpg'}
+                  alt={seller.name}
+                  fill
+                  style={{ objectFit: 'cover', borderRadius: '50%' }}
+                  sizes="(max-width: 768px) 150px, 150px"
+                  priority
+                />
+              </div>
               <h2 className="seller-name">{seller.name}</h2>
               <p className="seller-bio"><strong>About Me:</strong><br />{seller.bio}</p>
               <p className="seller-story"><strong>Sellers Story:</strong> <br />{seller.story}</p>
@@ -68,36 +75,3 @@ export default function SellersPage() {
     </main>
   );
 }
-
-
-
-
-
-/*
-  return (
-    <main className="p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">Featured Artisans</h1>
-      {sellers.length === 0 ? (
-        <p className="text-center text-gray-500">No sellers found yet.</p>
-      ) : (
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sellers.map((seller) => (
-            <li key={seller.id} className="bg-white shadow-md rounded-md p-4">
-              <img
-                src={seller.profile_pic || '/images/profile_pics/default.jpg'}
-                alt={seller.name}
-                className="w-24 h-24 rounded-full object-cover mx-auto mb-3"
-              />
-              <h2 className="text-lg font-semibold text-center">{seller.name}</h2>
-              <p className="text-sm text-center text-gray-600">{seller.bio}</p>
-              <p className="text-xs italic text-center text-gray-500 mt-1">{seller.story}</p>
-            </li>
-          ))}
-        </ul>
-      )}
-    </main>
-  );
- 
- */
-
-
