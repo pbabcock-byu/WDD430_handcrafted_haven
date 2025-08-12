@@ -79,7 +79,6 @@ const Header = () => {
                   My Profile
                 </Link>
               )}
-              <LogoutButton onLogoutSuccess={checkLoginStatus}/> 
             </>
           ) : (
             <>

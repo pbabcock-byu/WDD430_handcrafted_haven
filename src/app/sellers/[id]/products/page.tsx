@@ -27,7 +27,7 @@ export default async function SellerProductsPage({ params }: SellerProductsPageP
 
   return (
     <div>
-      <h1 className="c">
+      <h1 className="text-center">
         {seller?.shop_name || seller?.name}&apos;s Products
       </h1>
 

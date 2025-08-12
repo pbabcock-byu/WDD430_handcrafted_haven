@@ -33,8 +33,8 @@ const HomePage = () => {
             </a>
           </div>
           <br />
-          <Link href="/sign-up-seller" className="text-sm font-semibold leading-6">
-            Join us as a Seller! <span aria-hidden="true">&larr;</span>
+          <Link href="/sign-up-seller" className="cta-button">
+            Join us as a Seller!
           </Link>
         </main>
       </div>
