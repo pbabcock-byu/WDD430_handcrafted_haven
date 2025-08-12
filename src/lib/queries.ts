@@ -13,6 +13,14 @@ export type Product = {
   rating_count?: number;
 };
 
+export type Review = {
+  id: string;
+  rating: number;
+  comment: string;
+  reviewer_name: string;
+  created_at: string;
+};
+
 export async function getProductById(productId: string) {
   const result = await sql`
     SELECT 

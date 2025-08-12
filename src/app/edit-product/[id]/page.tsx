@@ -80,7 +80,7 @@ export default function EditProductPage() {
     })
 
     if (res.ok) {
-      router.push('/products')
+      router.push('/profile')
     } else {
       alert('Error updating product')
     }
@@ -91,6 +91,15 @@ export default function EditProductPage() {
   return (
     <div className="review-container">
       <h2 className="products-heading">Edit Product</h2>
+      {product.image_url && (
+        <div className="flex justify-center my-4">
+          <img
+            src={product.image_url}
+            alt={product.title}
+            className="w-full"
+          />
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="review-form" encType="multipart/form-data">
         <label>

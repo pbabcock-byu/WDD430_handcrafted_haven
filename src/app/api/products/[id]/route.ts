@@ -1,10 +1,8 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { sql } from '@/lib/db';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { IncomingForm, File as FormidableFile } from 'formidable';
+import { writeFile } from 'fs/promises';
 import path from 'path';
-import type { IncomingMessage } from 'http';
-import { Readable } from 'stream';
 
 export const dynamic = 'force-dynamic';
 
@@ -55,30 +53,7 @@ export async function GET(
   }
 }
 
-function convertNextRequestToNodeRequest(req: NextRequest): IncomingMessage {
-  // We assume req.body is a ReadableStream or string. We cast it as needed.
-  // If req.body is a ReadableStream, we convert to Node Readable stream.
-  // If req.body is string, create a stream from it.
-  let bodyStream: Readable;
-
-  if (typeof req.body === 'string' || req.body instanceof String) {
-    bodyStream = Readable.from(req.body as string);
-  } else if (req.body instanceof Readable) {
-    bodyStream = req.body as Readable;
-  } else if (req.body) {
-    // fallback: try to convert to buffer and then to stream
-    const buffer = Buffer.from(JSON.stringify(req.body));
-    bodyStream = Readable.from(buffer);
-  } else {
-    bodyStream = Readable.from([]);
-  }
-
-  const headers = Object.fromEntries(req.headers.entries());
-
-  // We assign headers to the stream to emulate IncomingMessage for formidable
-  return Object.assign(bodyStream, { headers }) as unknown as IncomingMessage;
-}
-
+// UPDATES a product from the Seller profile page.
 export async function PUT(
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
@@ -96,70 +71,118 @@ export async function PUT(
   let sellerId: number;
   try {
     const payload = jwt.verify(token, JWT_SECRET) as JwtPayloadWithSellerId;
-    if (!payload.sellerId) throw new Error('sellerId missing');
+    if (!payload.sellerId) {
+      return NextResponse.json({ message: 'Invalid token payload' }, { status: 401 });
+    }
     sellerId = payload.sellerId;
   } catch {
     return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
   }
 
-  const [product] = await sql<
-    {
-      id: number;
-      seller_id: number;
-      image_url: string;
-    }[]
-  >`
-    SELECT * FROM products WHERE id = ${productId}
-  `;
+  try {
+    const [product] = await sql<
+      {
+        id: number;
+        seller_id: number;
+        image_url: string;
+      }[]
+    >`
+      SELECT id, seller_id, image_url FROM products WHERE id = ${productId}
+    `;
 
-  if (!product || product.seller_id !== sellerId) {
-    return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+    if (!product || product.seller_id !== sellerId) {
+      return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+    }
+
+    const formData = await req.formData();
+    const title = formData.get('title') as string | null;
+    const description = formData.get('description') as string | null;
+    const price = formData.get('price') as string | null;
+    const imageFile = formData.get('image') as File | null;
+
+    if (!title || !description || !price) {
+      return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
+    }
+
+    let image_url = product.image_url;
+
+    if (imageFile && imageFile.size > 0) {
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      const filename = `${Date.now()}-${imageFile.name}`;
+      const uploadPath = path.join(process.cwd(), 'public/uploads', filename);
+
+      await writeFile(uploadPath, buffer);
+      image_url = `/uploads/${filename}`;
+    }
+
+    await sql`
+      UPDATE products
+      SET title = ${title},
+          description = ${description},
+          price = ${price},
+          image_url = ${image_url}
+      WHERE id = ${productId}
+    `;
+
+    return NextResponse.json({ success: true, message: 'Product updated successfully' });
+  } catch (error) {
+    console.error('Error updating product:', error);
+    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
-
-  const form = new IncomingForm({
-    multiples: false,
-    uploadDir: path.join(process.cwd(), '/public/uploads'),
-    keepExtensions: true,
-  });
-
-  const data: {
-    fields: Record<string, string>;
-    files: Record<string, FormidableFile | FormidableFile[]>;
-  } = await new Promise((resolve, reject) => {
-    const nodeReq = convertNextRequestToNodeRequest(req);
-    form.parse(nodeReq, (err, fields, files) => {
-      if (err) return reject(err);
-      resolve({ fields, files });
-    });
-  });
-
-  const { title, description, price } = data.fields;
-  let image_url = product.image_url;
-
-  // image file can be single or array, handle both
-  const imageFile = Array.isArray(data.files.image)
-    ? data.files.image[0]
-    : data.files.image;
-
-  if (imageFile?.filepath) {
-    const filename = path.basename(imageFile.filepath);
-    image_url = `/uploads/${filename}`;
-  }
-
-  await sql`
-    UPDATE products
-    SET title = ${title},
-        description = ${description},
-        price = ${price},
-        image_url = ${image_url}
-    WHERE id = ${productId}
-  `;
-
-  return NextResponse.json({ success: true });
 }
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// DELETE a product from the Seller profile page.
+export async function DELETE(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  const { id: productId } = context.params;
+
+  const authHeader = req.headers.get('authorization');
+  const token = authHeader?.split(' ')[1];
+  const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
+
+  if (!token) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  let sellerId: number;
+  try {
+    const payload = jwt.verify(token, JWT_SECRET) as JwtPayloadWithSellerId;
+    if (!payload.sellerId) {
+      return NextResponse.json({ message: 'Invalid token payload' }, { status: 401 });
+    }
+    sellerId = payload.sellerId;
+  } catch {
+    return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
+  }
+
+  try {
+    const [product] = await sql<{ seller_id: number }[]>`
+      SELECT seller_id FROM products WHERE id = ${productId}
+    `;
+
+    if (!product) {
+      return NextResponse.json({ message: 'Product not found' }, { status: 404 });
+    }
+
+    if (product.seller_id !== sellerId) {
+      return NextResponse.json({ message: 'Forbidden: You do not have permission to delete this product' }, { status: 403 });
+    }
+
+    await sql`
+      DELETE FROM reviews WHERE product_id = ${productId}
+    `;
+
+    await sql`
+      DELETE FROM products WHERE id = ${productId}
+    `;
+
+    return NextResponse.json({ success: true, message: 'Product and associated reviews deleted successfully' }, { status: 200 });
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    return NextResponse.json({ message: `Internal Server Error: ${(error as Error).message}` }, { status: 500 });
+  }
+}

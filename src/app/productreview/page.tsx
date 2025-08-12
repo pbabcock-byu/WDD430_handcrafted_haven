@@ -100,7 +100,6 @@ export default function ProductReviewPage() {
           sizes="(max-width: 768px) 100vw, 300px"
           priority
         />
-        <p><strong>Price:</strong> ${product.price}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="review-form">
