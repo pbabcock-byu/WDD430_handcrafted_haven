@@ -148,7 +148,7 @@ export async function PUT(
     files: Record<string, FormidableFile | FormidableFile[]>;
   } = await new Promise((resolve, reject) => {
     const nodeReq = convertNextRequestToNodeRequest(req);
-    form.parse(nodeReq, (err, fields, files) => {
+    form.parse(nodeReq, (err, _fields, _files) => {
       if (err) return reject(err);
       //resolve({ fields, files });
     });
