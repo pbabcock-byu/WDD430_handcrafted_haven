@@ -23,9 +23,9 @@ interface JwtPayloadWithSellerId extends JwtPayload {
 
 export async function GET(
   request: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: { id: string } }
 ) {
-  const { id: productId } = await context.params;
+  const { id: productId } = context.params;
   const authHeader = request.headers.get('authorization');
   const token = authHeader?.split(' ')[1];
   const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
@@ -56,9 +56,9 @@ export async function GET(
 // UPDATES a product from the Seller profile page.
 export async function PUT(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: { params: { id: string } }
 ) {
-  const { id: productId } = await context.params;
+  const { id: productId } = context.params;
 
   const authHeader = req.headers.get('authorization');
   const token = authHeader?.split(' ')[1];
