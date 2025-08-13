@@ -24,8 +24,8 @@ export default function SellersPage() {
       try {
         const res = await fetch('/api/sellers');
         const data = await res.json();
-        setSellers(data.sellers || data); // fallback if data is nested
-        console.log('Loaded sellers:', data.sellers || data);
+        setSellers(data.sellers || data);
+        console.warn('Loaded sellers:', data.sellers || data);
       } catch (error) {
         console.error('Failed to load sellers:', error);
       }

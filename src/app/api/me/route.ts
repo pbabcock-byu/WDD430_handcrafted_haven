@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
   try {
     decoded = jwt.verify(token, JWT_SECRET) as DecodedToken;
   } catch (error) {
-    return NextResponse.json({ message: 'Invalid or expired token' }, { status: 401 });
+    return NextResponse.json({ message: 'Invalid or expired token', error }, { status: 401 });
   }
 
   const userId = decoded.userId;

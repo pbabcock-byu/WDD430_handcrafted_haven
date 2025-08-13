@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import LogoutButton from "./LogoutButton";
 import { NavigationType } from './types';
 import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';

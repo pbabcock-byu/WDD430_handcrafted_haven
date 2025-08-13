@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 
-export async function POST(request: Request) {
+export async function POST() {
     try {
     
-        console.log('User attempted logout.'); 
+        console.warn('User attempted logout.'); 
 
         return NextResponse.json({ message: 'Logged out successfully.' }, { status: 200 });
 
