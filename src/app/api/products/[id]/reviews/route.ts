@@ -69,12 +69,41 @@ export async function GET(
   }
 }
 
-function convertNextRequestToNodeRequest(req: NextRequest): IncomingMessage {
-  // Create a readable stream from req.body for formidable
-  const readable = Readable.from(req.body as Readable | string);
-  const headers = Object.fromEntries(req.headers.entries());
-  return Object.assign(readable, { headers }) as unknown as IncomingMessage;
+
+function webStreamToNodeStream(readableStream: ReadableStream<Uint8Array>): Readable {
+  const reader = readableStream.getReader();
+
+  return new Readable({
+    async read() {
+      try {
+        const { done, value } = await reader.read();
+        if (done) {
+          this.push(null); // End of stream
+        } else {
+          this.push(Buffer.from(value));
+        }
+      } catch (err) {
+        //this.destroy(err);
+      }
+    },
+  });
 }
+
+export function convertNextRequestToNodeRequest(req: NextRequest): IncomingMessage {
+  if (!req.body) {
+    throw new Error('Request body is missing');
+  }
+
+  // Convert the web ReadableStream body to a Node.js Readable stream
+  const nodeReadable = webStreamToNodeStream(req.body);
+
+  // Copy headers from NextRequest to a plain object
+  const headers = Object.fromEntries(req.headers.entries());
+
+  // Attach headers to the readable stream to mimic IncomingMessage
+  return Object.assign(nodeReadable, { headers }) as unknown as IncomingMessage;
+}
+
 
 // -------------------- PUT (update product) --------------------
 export async function PUT(
@@ -121,7 +150,7 @@ export async function PUT(
     const nodeReq = convertNextRequestToNodeRequest(req);
     form.parse(nodeReq, (err, fields, files) => {
       if (err) return reject(err);
-      resolve({ fields, files });
+      //resolve({ fields, files });
     });
   });
 
