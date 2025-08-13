@@ -26,10 +26,12 @@ interface ProductDetailProps {
 }
 
 export default async function ProductDetailPage({ params }: ProductDetailProps) {
+  // params es un Promise en TU proyecto, así que se espera await
   const { id: productId } = await params;
 
-  const product: Product | undefined = await getProductById(productId);
-  const reviews: Review[] = await getReviewsByProductId(productId);
+  // getProductById puede devolver null; tipamos acorde
+  const product = (await getProductById(productId)) as Product | null;
+  const reviews = (await getReviewsByProductId(productId)) as Review[];
 
   if (!product) {
     return <p>Product not found.</p>;
@@ -84,4 +86,3 @@ export default async function ProductDetailPage({ params }: ProductDetailProps) 
     </div>
   );
 }
-

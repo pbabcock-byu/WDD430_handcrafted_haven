@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import '../globals.css';
@@ -13,6 +13,14 @@ interface Product {
 }
 
 export default function ProductReviewPage() {
+  return (
+    <Suspense fallback={<p>Loading…</p>}>
+      <ReviewContent />
+    </Suspense>
+  );
+}
+
+function ReviewContent() {
   const searchParams = useSearchParams();
   const productId = searchParams.get('id');
   const [product, setProduct] = useState<Product | null>(null);
@@ -67,7 +75,6 @@ export default function ProductReviewPage() {
         setRating('');
         setComment('');
 
-        // Clear message after 3 seconds
         setTimeout(() => {
           setSuccessMessage('');
         }, 3000);
@@ -90,7 +97,10 @@ export default function ProductReviewPage() {
     <div className="review-container">
       <h1 className="review-container">Review: {product.title}</h1>
 
-      <div className="review-container product-info" style={{ position: 'relative', width: '300px', height: '300px' }}>
+      <div
+        className="review-container product-info"
+        style={{ position: 'relative', width: '300px', height: '300px' }}
+      >
         <Image
           src={product.image_url}
           alt={product.title}
@@ -128,7 +138,6 @@ export default function ProductReviewPage() {
         </button>
       </form>
 
-      {/* Show success or error messages inline */}
       {successMessage && (
         <div className="success-message" role="alert" style={{ color: 'green', marginTop: '1rem' }}>
           {successMessage}

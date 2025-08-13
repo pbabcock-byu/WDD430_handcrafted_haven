@@ -1,12 +1,13 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { sql } from '@/lib/db';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { IncomingForm, File as FormidableFile } from 'formidable';
+import { IncomingForm, File as FormidableFile, Files } from 'formidable';
 import path from 'path';
-import type { IncomingMessage } from 'http';
+import type { IncomingMessage, IncomingHttpHeaders } from 'http';
 import { Readable } from 'stream';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 // Define the Product type based on your DB schema for type-safe query results
 interface Product {
@@ -36,12 +37,53 @@ interface JwtPayloadWithUserId extends JwtPayload {
   userId?: number;
 }
 
+// Helper: get product id from request URL (/api/products/:id/reviews)
+function getProductIdFromUrl(request: Request): string {
+  const { pathname } = new URL(request.url);
+  const parts = pathname.split('/'); // ["", "api", "products", ":id", "reviews"]
+  const idx = parts.indexOf('products');
+  const id = idx >= 0 ? parts[idx + 1] : '';
+  if (!id) throw new Error('Product id not found in URL');
+  return id;
+}
+
+function webStreamToNodeStream(readableStream: ReadableStream<Uint8Array>): Readable {
+  const reader = readableStream.getReader();
+  return new Readable({
+    async read() {
+      try {
+        const { done, value } = await reader.read();
+        if (done) {
+          this.push(null); // End of stream
+        } else {
+          this.push(Buffer.from(value));
+        }
+      } catch (err: unknown) {
+        const error = err instanceof Error ? err : new Error(String(err));
+        this.destroy(error);
+      }
+    },
+  });
+}
+
+function convertNextRequestToNodeRequest(req: Request): IncomingMessage {
+  if (!req.body) {
+    throw new Error('Request body is missing');
+  }
+  const nodeReadable = webStreamToNodeStream(req.body as ReadableStream<Uint8Array>);
+  const headers: IncomingHttpHeaders = Object.fromEntries(req.headers.entries());
+  return Object.assign(nodeReadable, { headers }) as unknown as IncomingMessage;
+}
+
+function isFormidableFile(v: unknown): v is FormidableFile {
+  return typeof v === 'object' && v !== null && 'filepath' in (v as FormidableFile) &&
+         typeof (v as FormidableFile).filepath === 'string';
+}
+
 // -------------------- GET (product details) --------------------
-export async function GET(
-  request: Request,
-  context: { params: Promise<{ id: string }> }
-) {
-  const { id: productId } = await context.params;
+export async function GET(request: Request) {
+  const productId = getProductIdFromUrl(request);
+
   const authHeader = request.headers.get('authorization');
   const token = authHeader?.split(' ')[1];
   const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
@@ -58,59 +100,18 @@ export async function GET(
       JOIN sellers s ON p.seller_id = s.id
       WHERE p.id = ${productId}
     `;
-
     if (!product) {
       return NextResponse.json({ message: 'Product not found' }, { status: 404 });
     }
-
     return NextResponse.json({ product }, { status: 200 });
   } catch {
     return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
   }
 }
 
-
-function webStreamToNodeStream(readableStream: ReadableStream<Uint8Array>): Readable {
-  const reader = readableStream.getReader();
-
-  return new Readable({
-    async read() {
-      try {
-        const { done, value } = await reader.read();
-        if (done) {
-          this.push(null); // End of stream
-        } else {
-          this.push(Buffer.from(value));
-        }
-      } catch (err) {
-        this.destroy(err);
-      }
-    },
-  });
-}
-
-export function convertNextRequestToNodeRequest(req: NextRequest): IncomingMessage {
-  if (!req.body) {
-    throw new Error('Request body is missing');
-  }
-
-  // Convert the web ReadableStream body to a Node.js Readable stream
-  const nodeReadable = webStreamToNodeStream(req.body);
-
-  // Copy headers from NextRequest to a plain object
-  const headers = Object.fromEntries(req.headers.entries());
-
-  // Attach headers to the readable stream to mimic IncomingMessage
-  return Object.assign(nodeReadable, { headers }) as unknown as IncomingMessage;
-}
-
-
 // -------------------- PUT (update product) --------------------
-export async function PUT(
-  req: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
-  const { id: productId } = await context.params;
+export async function PUT(req: Request) {
+  const productId = getProductIdFromUrl(req);
 
   const authHeader = req.headers.get('authorization');
   const token = authHeader?.split(' ')[1];
@@ -132,7 +133,6 @@ export async function PUT(
   const [product] = await sql<ProductFull[]>`
     SELECT * FROM products WHERE id = ${productId}
   `;
-
   if (!product || product.seller_id !== sellerId) {
     return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
   }
@@ -145,24 +145,31 @@ export async function PUT(
 
   const data: {
     fields: Record<string, string>;
-    files: Record<string, FormidableFile | FormidableFile[]>;
+    files: Files;
   } = await new Promise((resolve, reject) => {
-    const nodeReq = convertNextRequestToNodeRequest(req);
-    form.parse(nodeReq, (err, _fields, _files) => {
-      if (err) return reject(err);
-      //resolve({ fields, files });
-    });
+    try {
+      const nodeReq = convertNextRequestToNodeRequest(req);
+      form.parse(nodeReq, (err, fields, files) => {
+        if (err) return reject(err);
+        const normalizedFields: Record<string, string> = {};
+        for (const [k, v] of Object.entries(fields as Record<string, string | string[] | undefined>)) {
+          normalizedFields[k] = Array.isArray(v) ? (v[0] ?? '') : (v ?? '');
+        }
+        resolve({ fields: normalizedFields, files });
+      });
+    } catch (e) {
+      reject(e);
+    }
   });
 
   const { title, description, price } = data.fields;
   let image_url = product.image_url;
 
-  // Handle the possibility that image file is single or array
-  const imageFile = Array.isArray(data.files.image)
-    ? data.files.image[0]
-    : data.files.image;
+  const filesRecord = data.files as Record<string, FormidableFile | FormidableFile[] | undefined>;
+  const imageEntry = filesRecord['image'];
+  const imageFile = Array.isArray(imageEntry) ? imageEntry[0] : imageEntry;
 
-  if (imageFile?.filepath) {
+  if (isFormidableFile(imageFile)) {
     const filename = path.basename(imageFile.filepath);
     image_url = `/uploads/${filename}`;
   }
@@ -180,11 +187,8 @@ export async function PUT(
 }
 
 // -------------------- POST (submit review) --------------------
-export async function POST(
-  req: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
-  const { id: productId } = await context.params;
+export async function POST(req: Request) {
+  const productId = getProductIdFromUrl(req);
   const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
 
   const authHeader = req.headers.get('authorization');
@@ -226,9 +230,3 @@ export async function POST(
     return NextResponse.json({ message: 'Failed to save review' }, { status: 500 });
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
