@@ -83,7 +83,7 @@ function webStreamToNodeStream(readableStream: ReadableStream<Uint8Array>): Read
           this.push(Buffer.from(value));
         }
       } catch (err) {
-        //this.destroy(err);
+        this.destroy(err);
       }
     },
   });
