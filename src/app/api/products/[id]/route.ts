@@ -18,14 +18,18 @@ interface Product {
   shop_name: string;
 }
 
+interface RouteParams {
+  params: { id: string}
+}
+
 interface JwtPayloadWithSellerId extends JwtPayload {
   sellerId?: number;
 }
 
 export async function GET(
-  request: NextRequest, context: { params : { id: string}})
+  request: NextRequest, { params }: RouteParams)
   {
-  const { id: productId } = context.params;
+  const { id: productId } = params;
   const authHeader = request.headers.get('authorization');
   const token = authHeader?.split(' ')[1];
   const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
@@ -55,9 +59,9 @@ export async function GET(
 
 // UPDATES a product from the Seller profile page.
 export async function PUT(
-  request: NextRequest, context: { params: { id: string }})
+  request: NextRequest, { params }: RouteParams)
   {
-  const { id: productId } = context.params;
+  const { id: productId } = params;
 
   const authHeader = request.headers.get('authorization');
   const token = authHeader?.split(' ')[1];
@@ -134,9 +138,9 @@ export async function PUT(
 
 // DELETE a product from the Seller profile page.
 export async function DELETE(
-  request: NextRequest, context: { params: { id: string }})
+  request: NextRequest, { params }: RouteParams)
   {
-  const { id: productId } = context.params;
+  const { id: productId } = params;
 
   const authHeader = request.headers.get('authorization');
   const token = authHeader?.split(' ')[1];
