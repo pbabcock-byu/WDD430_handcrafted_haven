@@ -4,9 +4,6 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { writeFile } from 'fs/promises';
 import path from 'path';
 
-type Context = {
-  params: Record<string, string>;
-}
 
 export const dynamic = 'force-dynamic';
 
@@ -26,7 +23,7 @@ interface JwtPayloadWithSellerId extends JwtPayload {
 }
 
 export async function GET(
-  request: NextRequest, context: Context)
+  request: NextRequest, context: { params : { id: string}})
   {
   const { id: productId } = context.params;
   const authHeader = request.headers.get('authorization');
@@ -58,7 +55,7 @@ export async function GET(
 
 // UPDATES a product from the Seller profile page.
 export async function PUT(
-  request: NextRequest, context: Context)
+  request: NextRequest, context: { params: { id: string }})
   {
   const { id: productId } = context.params;
 
@@ -137,7 +134,7 @@ export async function PUT(
 
 // DELETE a product from the Seller profile page.
 export async function DELETE(
-  request: NextRequest, context: Context)
+  request: NextRequest, context: { params: { id: string }})
   {
   const { id: productId } = context.params;
 
