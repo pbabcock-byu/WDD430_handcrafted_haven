@@ -5,9 +5,7 @@ import { writeFile } from 'fs/promises';
 import path from 'path';
 
 type Context = {
-  params: {
-    id: string;
-  }
+  params: Record<string, string>;
 }
 
 export const dynamic = 'force-dynamic';
