@@ -505,9 +505,6 @@ export default function ProfilePage() {
                 required
                 className="w-full border rounded-lg px-3 py-2"
               />
-              {passwordChangeError && (
-                <p className="text-red-500">{passwordChangeError}</p>
-              )}
               {passwordChangeSuccess && (
                 <p className="text-green-500">{passwordChangeSuccess}</p>
               )}
