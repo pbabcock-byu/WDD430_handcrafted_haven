@@ -259,17 +259,18 @@ export default function ProfilePage() {
     }
   };
 
-  /*const getProfilePicUrl = (pic?: string) => {
+ const getProfilePicUrl = (pic?: string) => {
     if (!pic) return "/default-profile.png";
     return pic.startsWith("http")
       ? pic
       : `${process.env.NEXT_PUBLIC_BASE_URL || ""}${pic}`;
-  };*/
+  };
+ /*
   const getProfilePicUrl = (pic?: string) => {
   if (!pic) return "/default-profile.png";
   return pic.startsWith("http") ? pic : pic;
 };
-
+*/
 
   if (loading) {
     return (
