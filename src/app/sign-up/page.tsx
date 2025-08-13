@@ -32,7 +32,7 @@ export default function SignUpPage() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Registration successful:', data);
+                console.warn('Registration successful:', data);
                 setSuccess(data.message || 'Registration successful! You can now log in.');
                 setName('');
                 setEmail('');

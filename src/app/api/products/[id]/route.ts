@@ -4,6 +4,10 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { writeFile } from 'fs/promises';
 import path from 'path';
 
+type Context = {
+  params: Record<string, string>;
+}
+
 export const dynamic = 'force-dynamic';
 
 interface Product {
@@ -22,10 +26,9 @@ interface JwtPayloadWithSellerId extends JwtPayload {
 }
 
 export async function GET(
-  request: Request,
-  context: { params: Promise<{ id: string }> }
-) {
-  const { id: productId } = await context.params;
+  request: NextRequest, context: Context)
+  {
+  const { id: productId } = context.params;
   const authHeader = request.headers.get('authorization');
   const token = authHeader?.split(' ')[1];
   const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
@@ -55,12 +58,11 @@ export async function GET(
 
 // UPDATES a product from the Seller profile page.
 export async function PUT(
-  req: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
-  const { id: productId } = await context.params;
+  request: NextRequest, context: Context)
+  {
+  const { id: productId } = context.params;
 
-  const authHeader = req.headers.get('authorization');
+  const authHeader = request.headers.get('authorization');
   const token = authHeader?.split(' ')[1];
   const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
 
@@ -94,7 +96,7 @@ export async function PUT(
       return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
     }
 
-    const formData = await req.formData();
+    const formData = await request.formData();
     const title = formData.get('title') as string | null;
     const description = formData.get('description') as string | null;
     const price = formData.get('price') as string | null;
@@ -135,12 +137,11 @@ export async function PUT(
 
 // DELETE a product from the Seller profile page.
 export async function DELETE(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
+  request: NextRequest, context: Context)
+  {
   const { id: productId } = context.params;
 
-  const authHeader = req.headers.get('authorization');
+  const authHeader = request.headers.get('authorization');
   const token = authHeader?.split(' ')[1];
   const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
 

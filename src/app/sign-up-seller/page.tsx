@@ -45,7 +45,7 @@ export default function SignUpSellerPage() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Seller registration successful:', data);
+                console.warn('Seller registration successful:', data);
                 setSuccess(data.message || 'Seller account created successfully! You can now log in.');
                 setName('');
                 setEmail('');

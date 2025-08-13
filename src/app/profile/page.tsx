@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
 import LogoutButton from "../components/LogoutButton";
 
@@ -54,7 +53,7 @@ export default function ProfilePage() {
   const [adminLoading, setAdminLoading] = useState(false);
   const [adminError, setAdminError] = useState<string | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
-  const [productsLoading, setProductsLoading] = useState(false);
+  const [productsLoading, _setProductsLoading] = useState(false);
   const [productToDeleteId, setProductToDeleteId] = useState<number | null>(
     null
   );

@@ -1,120 +1,143 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface Product {
-  id: string
-  title: string
-  description: string
-  price: number
-  image_url?: string
-  seller_id: string
-  [key: string]: unknown
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  image_url?: string;
+  seller_id: string;
+  [key: string]: unknown;
 }
 
 export default function EditProductPage() {
-  const [product, setProduct] = useState<Product | null>(null)
-  const router = useRouter()
-  const { id } = useParams<{ id: string }>()
+  const [product, setProduct] = useState<Product | null>(null);
+  const router = useRouter();
+  const { id } = useParams<{ id: string }>();
 
-  const [token, setToken] = useState<string | null>(null)
-  const [sellerId, setSellerId] = useState<string | null>(null)
+  const [token, setToken] = useState<string | null>(null);
+  const [sellerId, setSellerId] = useState<string | null>(null);
 
   useEffect(() => {
-    const t = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null
+    const t =
+      typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
     if (t) {
       try {
-        const payload = JSON.parse(atob(t.split('.')[1])) as { sellerId?: string }
-        setToken(t)
-        setSellerId(payload.sellerId ?? null)
+        const payload = JSON.parse(atob(t.split(".")[1])) as {
+          sellerId?: string;
+        };
+        setToken(t);
+        setSellerId(payload.sellerId ?? null);
       } catch (e) {
-        console.error('Invalid token', e)
+        console.error("Invalid token", e);
       }
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (!id || !sellerId || !token) return
+    if (!id || !sellerId || !token) return;
 
     const fetchProduct = async () => {
       try {
         const res = await fetch(`/api/products/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
-        })
-        const data: { product?: Product; message?: string } = await res.json()
+        });
+        const data: { product?: Product; message?: string } = await res.json();
 
         if (!res.ok) {
-          alert(data.message || 'Failed to fetch product')
-          router.push('/products')
-          return
+          alert(data.message || "Failed to fetch product");
+          router.push("/products");
+          return;
         }
 
         if (data.product?.seller_id !== sellerId) {
-          alert('You are not authorized to edit this product.')
-          router.push('/products')
-          return
+          alert("You are not authorized to edit this product.");
+          router.push("/products");
+          return;
         }
 
-        setProduct(data.product)
+        setProduct(data.product);
       } catch (err) {
-        console.error(err)
-        alert('Unexpected error')
-        router.push('/products')
+        console.error(err);
+        alert("Unexpected error");
+        router.push("/products");
       }
-    }
+    };
 
-    fetchProduct()
-  }, [id, sellerId, token, router])
+    fetchProduct();
+  }, [id, sellerId, token, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!id) return
+    e.preventDefault();
+    if (!id) return;
 
-    const formData = new FormData(e.currentTarget)
+    const formData = new FormData(e.currentTarget);
 
     const res = await fetch(`/api/products/${id}`, {
-      method: 'PUT',
-      headers: { Authorization: `Bearer ${token || ''}` },
+      method: "PUT",
+      headers: { Authorization: `Bearer ${token || ""}` },
       body: formData,
-    })
+    });
 
     if (res.ok) {
-      router.push('/profile')
+      router.push("/profile");
     } else {
-      alert('Error updating product')
+      alert("Error updating product");
     }
-  }
+  };
 
-  if (!product) return <p className="loading">Loading...</p>
+  if (!product) return <p className="loading">Loading...</p>;
 
   return (
     <div className="review-container">
       <h2 className="products-heading">Edit Product</h2>
       {product.image_url && (
         <div className="flex justify-center my-4">
-          <img
+          <Image
             src={product.image_url}
             alt={product.title}
-            className="w-full"
+            width={500}
+            height={500} 
           />
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="review-form" encType="multipart/form-data">
+      <form
+        onSubmit={handleSubmit}
+        className="review-form"
+        encType="multipart/form-data"
+      >
         <label>
           Title
-          <input type="text" name="title" defaultValue={product.title} required />
+          <input
+            type="text"
+            name="title"
+            defaultValue={product.title}
+            required
+          />
         </label>
 
         <label>
           Description
-          <textarea name="description" defaultValue={product.description}></textarea>
+          <textarea
+            name="description"
+            defaultValue={product.description}
+          ></textarea>
         </label>
 
         <label>
           Price
-          <input type="number" name="price" step="0.01" defaultValue={product.price} required />
+          <input
+            type="number"
+            name="price"
+            step="0.01"
+            defaultValue={product.price}
+            required
+          />
         </label>
 
         <label>
@@ -125,5 +148,5 @@ export default function EditProductPage() {
         <button type="submit">Save Changes</button>
       </form>
     </div>
-  )
+  );
 }

@@ -37,7 +37,7 @@ export default function ProductList({ products }: Props) {
         const payload = JSON.parse(atob(token.split('.')[1]));
         setSellerId(payload.sellerId);
       } catch (error) {
-        console.error("Invalid token");
+        console.error("Invalid token", error);
       }
     }
   }, []);
