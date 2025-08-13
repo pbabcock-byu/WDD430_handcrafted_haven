@@ -229,7 +229,7 @@ button:hover {
 }
 
 .rate-button:hover,
-view-reviews-button:hover {
+.view-reviews-button:hover {
   background-color: #1e40af; /* Blue-700 */
 }
 
@@ -625,4 +625,57 @@ tbody {
   display: block;
   padding: 1rem;
   text-align: center;
+}
+
+/* =========================
+   Responsive Design
+========================= */
+@media (max-width: 768px) {
+  body {
+    width: 100%;
+    border: none;
+    padding: 0;
+  }
+
+  .navlinks {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .product-grid,
+  .seller-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .mainheader,
+  .mainfooter {
+    padding: 0.75rem;
+    text-align: center;
+  }
+
+  .product-image {
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .navlinks {
+    font-size: 0.9rem;
+  }
+
+  .loginbutton,
+  .signupseller,
+  .view-products-btn,
+  .rate-button,
+  .view-reviews-button,
+  .edit-button {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .seller-image {
+    width: 72px;
+    height: 72px;
+  }
 }
