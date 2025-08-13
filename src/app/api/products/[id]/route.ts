@@ -23,9 +23,10 @@ interface JwtPayloadWithSellerId extends JwtPayload {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { id: productId } = params;
+  const params = await context.params;
+  const productId = params.id;
   const authHeader = request.headers.get("authorization");
   const token = authHeader?.split(" ")[1];
   const JWT_SECRET = process.env.JWT_SECRET || "default_secret";
@@ -56,10 +57,12 @@ export async function GET(
   }
 }
 
-// UPDATES a product from the Seller profile page.
-export async function PUT(request: NextRequest, 
-  { params }: { params: { id: string } }) {
-  const { id: productId } = params;
+export async function PUT(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  const params = await context.params;
+  const productId = params.id;
 
   const authHeader = request.headers.get("authorization");
   const token = authHeader?.split(" ")[1];
@@ -84,13 +87,11 @@ export async function PUT(request: NextRequest,
   }
 
   try {
-    const [product] = await sql<
-      {
-        id: number;
-        seller_id: number;
-        image_url: string;
-      }[]
-    >`
+    const [product] = await sql<{
+      id: number;
+      seller_id: number;
+      image_url: string;
+    }[]>`
       SELECT id, seller_id, image_url FROM products WHERE id = ${productId}
     `;
 
@@ -146,10 +147,12 @@ export async function PUT(request: NextRequest,
   }
 }
 
-// DELETE a product from the Seller profile page.
-export async function DELETE(request: NextRequest, 
-  { params }: { params: { id: string }}) {
-  const { id: productId } = params;
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  const params = await context.params;
+  const productId = params.id;
 
   const authHeader = request.headers.get("authorization");
   const token = authHeader?.split(" ")[1];
